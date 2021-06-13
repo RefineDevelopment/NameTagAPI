@@ -1,2 +1,5 @@
 # NameTagAPI
-A fork of PotPvP's NameTags converted to 1.8x
+NameTagAPI for RefineDevelopment's Plugins (Private Only).
+
+# Credits
+FrozenOrb
