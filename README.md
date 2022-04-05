@@ -1,5 +1,2 @@
 # NameTagAPI
-NameTagAPI for RefineDevelopment's Plugins (Private Only).
-
-# Credits
-FrozenOrb
+Refine's NameTag API | Fork of Hylist's/Frozenorb's API
