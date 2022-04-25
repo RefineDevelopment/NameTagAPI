@@ -46,15 +46,15 @@ To setup NameTagAdapter, you can easily use
 ```java
 public class ExampleNameTagAdapter extends NameTagAdapter {
 
+    // So basically, all adapters are utilized to be update the player's nametag, but in sequence of their weights
     public ExampleNameTagAdapter() {
         super("Default Provider", 0); // (Name, Weight/Priroity), the name tag is updated of each update in sequence of the priority
-    }                                 // So basically, all adapters are utilized to be update the player's nametag, but in sequence of their weights
+    }
 
-                                    //toRefresh = the player getting their nameTag Refreshed (Target)
-    @Override                       //refreshFor = the player that will be receiving the update (Viewer)
+              //toRefresh = the player getting their nameTag Refreshed (Target)
+    @Override //refreshFor = the player that will be receiving the update (Viewer)
     public NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor) {
         return (this.createNameTag(ChatColor.GREEN + toRefresh.getDisplayName(), "")); //this#createNameTag is a method called from the super class
-    }                                                                                  //Meanwhile, it accepts arguments for (Prefix, Suffix)
-
+    }   //Meanwhile, it accepts arguments for (Prefix, Suffix)
 }
 ```
