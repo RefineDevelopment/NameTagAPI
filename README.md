@@ -48,7 +48,7 @@ public class ExampleNameTagAdapter extends NameTagAdapter {
 
     // So basically, all adapters are utilized to be update the player's nametag, but in sequence of their weights
     public ExampleNameTagAdapter() {
-        super("Default Provider", 0); // (Name, Weight/Priroity), the name tag is updated of each update in sequence of the priority
+        super("Default Provider", 0); //(Name, Weight), the name tag is updated of each adapter in sequence of the priority
     }
 
               //toRefresh = the player getting their nameTag Refreshed (Target)
