@@ -1,5 +1,6 @@
 package xyz.refinedev.nametag.listener;
 
+import lombok.RequiredArgsConstructor;
 import xyz.refinedev.nametag.NameTagHandler;
 import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
 import org.bukkit.Bukkit;
@@ -15,17 +16,20 @@ import xyz.refinedev.nametag.util.TaskUtil;
 import java.lang.reflect.Field;
 import java.util.Collections;
 
+@RequiredArgsConstructor
 public final class NameTagListener implements Listener {
 
+    private final NameTagHandler instance;
+    
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.getPlayer().setMetadata("Test-LoggedIn", new FixedMetadataValue(NameTagHandler.getInstance().getPlugin(), true));
+        event.getPlayer().setMetadata("name-LoggedIn", new FixedMetadataValue(NameTagHandler.getInstance().getPlugin(), true));
 
             try {
                 PacketPlayOutScoreboardTeam a = new PacketPlayOutScoreboardTeam();
                 team_mode.set(a, 3);
-                team_name.set(a, "reRefine");
-                team_display.set(a, "reRefine");
+                team_name.set(a, "refine");
+                team_display.set(a, "refine");
                 team_color.set(a, -1);
                 team_players.set(a, Collections.singletonList(event.getPlayer().getName()));
 
@@ -36,15 +40,15 @@ public final class NameTagListener implements Listener {
                 e.printStackTrace();
             }
 
-        NameTagHandler.initiatePlayer(event.getPlayer());
-        NameTagHandler.reloadPlayer(event.getPlayer());
-        NameTagHandler.reloadOthersFor(event.getPlayer());
+        instance.initiatePlayer(event.getPlayer());
+        NameTagHandler.getInstance().reloadPlayer(event.getPlayer());
+        NameTagHandler.getInstance().reloadOthersFor(event.getPlayer());
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        event.getPlayer().removeMetadata("Test-LoggedIn", NameTagHandler.getInstance().getPlugin());
-        NameTagHandler.getTeamMap().remove(event.getPlayer().getName());
+        event.getPlayer().removeMetadata("name-LoggedIn", NameTagHandler.getInstance().getPlugin());
+        NameTagHandler.getInstance().getTeamMap().remove(event.getPlayer().getName());
     }
 
 

@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="" />
+    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="Revamped the API, clean up as well">
+      <change afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_github_spigot_1_8_8_1_8_8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagPlugin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util/Reflection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NameTagAPI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/NameTagAPI.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dep/spigot.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/construct/NameTagComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagComparator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/construct/NameTagInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/construct/NametagUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagUpdate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/listener/NameTagListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/listener/NameTagListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/packet/ScoreboardTeamPacketMod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/protocol/ScoreboardTeamPacketMod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/provider/DefaultNameTagProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/adapter/DefaultNameTagProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/provider/NameTagProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/adapter/NameTagProvider.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +33,23 @@
   <component name="CodeStyleSettingsInfer">
     <option name="done" value="true" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
@@ -27,16 +62,32 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="J:\Minecraft Servers\Source Codes\My Projects\Refine Development\APIs\NameTagAPI\src\main\java\xyz\refinedev\nametag\util" />
+      <recent name="J:\Minecraft Servers\Source Codes\My Projects\Refine Development\APIs\NameTagAPI\src\main\java\xyz\refinedev\nametag\protocol" />
+      <recent name="J:\Minecraft Servers\Source Codes\My Projects\Refine Development\APIs\NameTagAPI\src\main\java\xyz\refinedev\nametag" />
       <recent name="J:\Minecraft Servers\Source Codes\My Projects\Purge Community\NameTagAPI\src\main\java\xyz\refinedev\nametag\util" />
       <recent name="J:\Minecraft Servers\Source Codes\My Projects\Purge Community\NameTagAPI" />
-      <recent name="J:\Minecraft Servers\Source Codes\My Projects\Purge Community\NameTagAPI\src" />
     </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="NameTagAPI [clean,install]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -72,8 +123,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1624103867476</updated>
+      <workItem from="1650882622484" duration="2238000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -85,5 +140,10 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Revamped the API, clean up as well" />
+    <option name="LAST_COMMIT_MESSAGE" value="Revamped the API, clean up as well" />
   </component>
 </project>

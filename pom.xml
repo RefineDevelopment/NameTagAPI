@@ -6,31 +6,29 @@
 
     <name>NameTagAPI</name>
     <url>https://dsc.gg/refine</url>
-    <description>Most Modern and Support Friendly NameTag API</description>
+    <description>Most Modern and Support Friendly NameTag API | Fork of FrozenOrb's API</description>
 
     <organization>
         <name>Refine Development</name>
         <url>https://dsc.gg/refine</url>
     </organization>
 
-    <groupId>xyz.refinedev.nametag</groupId>
+    <groupId>xyz.refinedev.api</groupId>
     <artifactId>NameTagAPI</artifactId>
     <version>1.0</version>
 
     <repositories>
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>funkemunky-releases</id>
+            <url>https://nexus.funkemunky.cc/content/repositories/releases/</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/dep/spigot.jar</systemPath>
+            <groupId>org.github.spigot</groupId>
+            <artifactId>1.8.8</artifactId>
+            <version>1.8.8</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -74,6 +72,11 @@
                         </goals>
                         <configuration>
                             <finalName>${project.artifactId}</finalName>
+                            <filters>
+                                <filter>
+                                    <excludes>**/META-INF/**</excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
