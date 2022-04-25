@@ -4,27 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="Revamped the API, clean up as well">
-      <change afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_github_spigot_1_8_8_1_8_8.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagPlugin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util/Reflection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NameTagAPI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/NameTagAPI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dep/spigot.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/construct/NameTagComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagComparator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/construct/NameTagInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/construct/NametagUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagUpdate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/listener/NameTagListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/listener/NameTagListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/packet/ScoreboardTeamPacketMod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/protocol/ScoreboardTeamPacketMod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/provider/DefaultNameTagProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/adapter/DefaultNameTagProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/provider/NameTagProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/adapter/NameTagProvider.java" afterDir="false" />
-    </list>
+    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="Revamped the API, clean up as well" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -66,6 +46,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -123,8 +106,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1624103867476</updated>
-      <workItem from="1650882622484" duration="2238000" />
+      <workItem from="1650882622484" duration="2595000" />
     </task>
+    <task id="LOCAL-00001" summary="Revamped the API, clean up as well">
+      <created>1650884879440</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1650884879440</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
