@@ -2,7 +2,7 @@
 Refine's NameTag API | Fork of Hylist's/Frozenorb's API
 
 ## Features
-- Support for Per-viwer NameTag changing
+- Support for Per-viewer NameTag changing
 - Asynchronous and Optimized
 - Easy to use
 - Can support more than one adapters (weighted priority)
