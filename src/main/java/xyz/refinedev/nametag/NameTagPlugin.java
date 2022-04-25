@@ -1,7 +1,7 @@
 package xyz.refinedev.nametag;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.refinedev.nametag.adapter.DefaultNameTagProvider;
+import xyz.refinedev.nametag.adapter.DefaultNameTagAdapter;
 
 import java.util.logging.Logger;
 
@@ -19,7 +19,7 @@ public class NameTagPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         NameTagHandler nameTagHandler = new NameTagHandler(this);
-        nameTagHandler.registerAdapter(new DefaultNameTagProvider());
+        nameTagHandler.registerAdapter(new DefaultNameTagAdapter());
         Logger.getGlobal().info("Loaded RefineNameTagAPI as a plugin!");
     }
 }

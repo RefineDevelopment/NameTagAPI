@@ -4,9 +4,9 @@ import org.bukkit.ChatColor;
 import xyz.refinedev.nametag.setup.NameTagInfo;
 import org.bukkit.entity.Player;
 
-public class DefaultNameTagProvider extends NameTagProvider {
+public class DefaultNameTagAdapter extends NameTagAdapter {
 
-    public DefaultNameTagProvider() {
+    public DefaultNameTagAdapter() {
         super("Default Provider", 0);
     }
 

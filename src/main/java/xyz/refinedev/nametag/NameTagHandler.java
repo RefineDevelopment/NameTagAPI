@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.refinedev.nametag.adapter.NameTagProvider;
+import xyz.refinedev.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.nametag.listener.NameTagListener;
 import xyz.refinedev.nametag.protocol.ScoreboardTeamPacketMod;
 import xyz.refinedev.nametag.setup.NameTagComparator;
@@ -22,7 +22,7 @@ public class NameTagHandler {
 
     private final Map<String, Map<String, NameTagInfo>> teamMap = new ConcurrentHashMap<>();
     private final List<NameTagInfo> registeredTeams = Collections.synchronizedList(new ArrayList<>());
-    private final List<NameTagProvider> providers = new ArrayList<>();
+    private final List<NameTagAdapter> providers = new ArrayList<>();
 
     private NameTagThread thread;
     private final JavaPlugin plugin;
@@ -42,7 +42,7 @@ public class NameTagHandler {
         this.plugin.getServer().getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
     }
 
-    public void registerAdapter(NameTagProvider newProvider) {
+    public void registerAdapter(NameTagAdapter newProvider) {
         this.providers.add(newProvider);
         this.providers.sort(new NameTagComparator());
     }
@@ -108,8 +108,8 @@ public class NameTagHandler {
 
         NameTagInfo provided = null;
 
-        for ( NameTagProvider nametagProvider : providers ) {
-            provided =  nametagProvider.fetchNameTag(toRefresh, refreshFor);
+        for ( NameTagAdapter nametagAdapter : providers ) {
+            provided =  nametagAdapter.fetchNameTag(toRefresh, refreshFor);
             if (provided != null) break;
         }
 

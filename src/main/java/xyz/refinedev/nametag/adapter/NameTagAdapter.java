@@ -9,14 +9,14 @@ import xyz.refinedev.nametag.util.CC;
 
 @Getter
 @AllArgsConstructor
-public abstract class NameTagProvider {
+public abstract class NameTagAdapter {
 
     private final String name;
     private final int weight;
 
     public abstract NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor);
 
-    public static NameTagInfo createNameTag(String prefix, String suffix) {
+    public NameTagInfo createNameTag(String prefix, String suffix) {
         return (NameTagHandler.getInstance().getOrCreate(CC.translate(prefix), CC.translate(suffix)));
     }
 }

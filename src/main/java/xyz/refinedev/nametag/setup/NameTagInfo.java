@@ -18,6 +18,6 @@ public class NameTagInfo {
         this.prefix = prefix;
         this.suffix = suffix;
 
-        teamAddPacket = new ScoreboardTeamPacketMod(name, prefix, suffix, new ArrayList<>(), 0);
+        this.teamAddPacket = new ScoreboardTeamPacketMod(name, prefix, suffix, new ArrayList<>(), 0);
     }
 }

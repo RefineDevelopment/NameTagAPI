@@ -10,7 +10,7 @@ public class NameTagUpdate {
     private String refreshFor;
 
     public NameTagUpdate(Player toRefresh) {
-        if(toRefresh == null) return;
+        if (toRefresh == null) return;
 
         this.toRefresh = toRefresh.getName();
     }
