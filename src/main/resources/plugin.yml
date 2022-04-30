@@ -1,5 +1,0 @@
-name: NameTagAPI
-main: xyz.refinedev.nametag.NameTagPlugin
-version: 1.0
-authors: [FrozenOrb, Drizzy, RefineDevelopment]
-description: A NameTagAPI forked off of FrozenOrb's API for Refine Development

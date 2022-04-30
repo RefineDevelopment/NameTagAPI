@@ -12,7 +12,7 @@ public class DefaultNameTagAdapter extends NameTagAdapter {
 
     @Override
     public NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor) {
-        return (createNameTag(ChatColor.GREEN + toRefresh.getDisplayName(), ""));
+        return (createNameTag(ChatColor.GREEN.toString(), ""));
     }
 
 }

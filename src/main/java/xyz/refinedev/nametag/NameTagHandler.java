@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.refinedev.nametag.adapter.DefaultNameTagAdapter;
 import xyz.refinedev.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.nametag.listener.NameTagListener;
 import xyz.refinedev.nametag.protocol.ScoreboardTeamPacketMod;
@@ -42,8 +43,8 @@ public class NameTagHandler {
         this.plugin.getServer().getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
     }
 
-    public void registerAdapter(NameTagAdapter newProvider) {
-        this.providers.add(newProvider);
+    public void registerAdapter(NameTagAdapter newAdapter) {
+        this.providers.add(newAdapter);
         this.providers.sort(new NameTagComparator());
     }
 
@@ -129,6 +130,9 @@ public class NameTagHandler {
     }
 
     public void initiatePlayer(Player player) {
+        if (this.providers.size() == 0) {
+            this.registerAdapter(new DefaultNameTagAdapter());
+        }
         registeredTeams.forEach(teamInfo -> teamInfo.getTeamAddPacket().sendToPlayer(player));
     }
 

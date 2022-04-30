@@ -41,14 +41,14 @@ public final class NameTagListener implements Listener {
             }
 
         instance.initiatePlayer(event.getPlayer());
-        NameTagHandler.getInstance().reloadPlayer(event.getPlayer());
-        NameTagHandler.getInstance().reloadOthersFor(event.getPlayer());
+        instance.reloadPlayer(event.getPlayer());
+        instance.reloadOthersFor(event.getPlayer());
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        event.getPlayer().removeMetadata("name-LoggedIn", NameTagHandler.getInstance().getPlugin());
-        NameTagHandler.getInstance().getTeamMap().remove(event.getPlayer().getName());
+        event.getPlayer().removeMetadata("name-LoggedIn", instance.getPlugin());
+        instance.getTeamMap().remove(event.getPlayer().getName());
     }
 
 
