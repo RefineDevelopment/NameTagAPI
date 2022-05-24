@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="Fix version">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="Fix default adapter registering double name">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagPlugin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +105,8 @@
       <updated>1624103867476</updated>
       <workItem from="1650882622484" duration="3943000" />
       <workItem from="1651307261117" duration="413000" />
-      <workItem from="1651308058316" duration="613000" />
+      <workItem from="1651308058316" duration="1689000" />
+      <workItem from="1651743271799" duration="84000" />
     </task>
     <task id="LOCAL-00001" summary="Revamped the API, clean up as well">
       <created>1650884879440</created>
@@ -152,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650885908106</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fix default adapter registering double name">
+      <created>1651311397575</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1651311397575</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -177,6 +182,7 @@
     <MESSAGE value="Refactor to NameTagAdapter" />
     <MESSAGE value="Whoops" />
     <MESSAGE value="Fix version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix version" />
+    <MESSAGE value="Fix default adapter registering double name" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix default adapter registering double name" />
   </component>
 </project>
