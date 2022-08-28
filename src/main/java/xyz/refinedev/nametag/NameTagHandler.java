@@ -16,12 +16,14 @@ import xyz.refinedev.nametag.setup.NameTagUpdate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Getter @Setter
+@Getter
+@Setter
 public class NameTagHandler {
 
-    @Getter private static NameTagHandler instance;
+    @Getter
+    private static NameTagHandler instance;
 
-    private final Map<String, Map<String, NameTagInfo>> teamMap = new ConcurrentHashMap<>();
+    private final Map<UUID, Map<UUID, NameTagInfo>> teamMap = new ConcurrentHashMap<>();
     private final List<NameTagInfo> registeredTeams = Collections.synchronizedList(new ArrayList<>());
     private final List<NameTagAdapter> providers = new ArrayList<>();
 
@@ -33,7 +35,7 @@ public class NameTagHandler {
 
     public NameTagHandler(JavaPlugin plugin) {
         instance = this;
-        
+
         this.plugin = plugin;
         this.initiated = true;
 
@@ -50,8 +52,8 @@ public class NameTagHandler {
 
     /**
      * Refresh the specified target for a specific viewer
-     * 
-     * @param toRefresh {@link Player} target
+     *
+     * @param toRefresh  {@link Player} target
      * @param refreshFor {@link Player} viewer
      */
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
@@ -75,7 +77,7 @@ public class NameTagHandler {
      * @param refreshFor {@link Player} viewer
      */
     public void reloadOthersFor(Player refreshFor) {
-        for ( Player toRefresh : this.plugin.getServer().getOnlinePlayers() ) {
+        for (Player toRefresh : this.plugin.getServer().getOnlinePlayers()) {
             if (refreshFor == toRefresh) continue;
             this.reloadPlayer(toRefresh, refreshFor);
         }
@@ -84,19 +86,19 @@ public class NameTagHandler {
     /**
      * Apply the {@link NameTagUpdate} according to
      * the specified conditions to the viewer/target
-     * 
+     *
      * @param nameTagUpdate {@link NameTagUpdate}  update
      */
     public void applyUpdate(NameTagUpdate nameTagUpdate) {
         if (nameTagUpdate.getToRefresh() == null) return;
-        Player toRefreshPlayer = this.plugin.getServer().getPlayerExact(nameTagUpdate.getToRefresh());
+        Player toRefreshPlayer = this.plugin.getServer().getPlayer(nameTagUpdate.getToRefresh());
 
         if (toRefreshPlayer == null) return;
 
         if (nameTagUpdate.getRefreshFor() == null) {
             this.plugin.getServer().getOnlinePlayers().forEach(refreshFor -> this.reloadPlayerInternal(toRefreshPlayer, refreshFor));
         } else {
-            Player refreshForPlayer = this.plugin.getServer().getPlayerExact(nameTagUpdate.getRefreshFor());
+            Player refreshForPlayer = this.plugin.getServer().getPlayer(nameTagUpdate.getRefreshFor());
 
             if (refreshForPlayer != null) {
                 this.reloadPlayerInternal(toRefreshPlayer, refreshForPlayer);
@@ -109,24 +111,24 @@ public class NameTagHandler {
 
         NameTagInfo provided = null;
 
-        for ( NameTagAdapter nametagAdapter : providers ) {
-            provided =  nametagAdapter.fetchNameTag(toRefresh, refreshFor);
+        for (NameTagAdapter nametagAdapter : providers) {
+            provided = nametagAdapter.fetchNameTag(toRefresh, refreshFor);
             if (provided != null) break;
         }
 
         if (provided == null) return;
 
-        Map<String, NameTagInfo> teamInfoMap = new HashMap<>();
-        
-        if (teamMap.containsKey(refreshFor.getName())) {
-            teamInfoMap = teamMap.get(refreshFor.getName());
+        Map<UUID, NameTagInfo> teamInfoMap = new HashMap<>();
+
+        if (teamMap.containsKey(refreshFor.getUniqueId())) {
+            teamInfoMap = teamMap.get(refreshFor.getUniqueId());
         }
 
         ScoreboardTeamPacketMod packet = new ScoreboardTeamPacketMod(provided.getName(), Collections.singletonList(toRefresh.getName()), 3);
         packet.sendToPlayer(refreshFor);
 
-        teamInfoMap.put(toRefresh.getName(), provided);
-        teamMap.put(refreshFor.getName(), teamInfoMap);        
+        teamInfoMap.put(toRefresh.getUniqueId(), provided);
+        teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
     }
 
     public void initiatePlayer(Player player) {
@@ -137,7 +139,7 @@ public class NameTagHandler {
     }
 
     public NameTagInfo getOrCreate(String prefix, String suffix) {
-        for( NameTagInfo teamInfo : registeredTeams ) {
+        for (NameTagInfo teamInfo : registeredTeams) {
             if (teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
                 return (teamInfo);
             }

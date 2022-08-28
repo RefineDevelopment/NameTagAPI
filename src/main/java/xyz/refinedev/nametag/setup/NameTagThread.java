@@ -3,7 +3,6 @@ package xyz.refinedev.nametag.setup;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.refinedev.nametag.NameTagHandler;
-import xyz.refinedev.nametag.setup.NameTagUpdate;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class NameTagThread extends Thread {
         while (true) {
             Iterator<NameTagUpdate> pendingUpdatesIterator = pendingUpdates.keySet().iterator();
 
-            while(pendingUpdatesIterator.hasNext()) {
+            while (pendingUpdatesIterator.hasNext()) {
                 NameTagUpdate pendingUpdate = pendingUpdatesIterator.next();
 
                 try {

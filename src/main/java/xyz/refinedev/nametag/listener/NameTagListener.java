@@ -48,7 +48,7 @@ public final class NameTagListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.getPlayer().removeMetadata("name-LoggedIn", instance.getPlugin());
-        instance.getTeamMap().remove(event.getPlayer().getName());
+        instance.getTeamMap().remove(event.getPlayer().getUniqueId());
     }
 
 
