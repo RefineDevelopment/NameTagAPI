@@ -39,6 +39,14 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>px-central</id>
+            <name>px-releases</name>
+            <url>https://artifactory.pxdev.cc/artifactory/libs-release-local</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <defaultGoal>clean install</defaultGoal>
         <plugins>

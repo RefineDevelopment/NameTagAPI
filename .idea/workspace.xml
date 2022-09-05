@@ -4,22 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="[=] Hopefully fix teamcity">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_github_spigot_1_8_8_1_8_8.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_github_spigot_1_8_8_1_8_8.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_projectlombok_lombok_1_18_12.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="[/] Finally fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NameTagAPI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/NameTagAPI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/NameTagHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/adapter/DefaultNameTagAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/adapter/DefaultNameTagAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/adapter/NameTagAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/adapter/NameTagAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/listener/NameTagListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/listener/NameTagListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/setup/NameTagComparator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util/CC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util/CC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util/Reflection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util/Reflection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util/TaskUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util/TaskUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +112,8 @@
       <workItem from="1651308058316" duration="1689000" />
       <workItem from="1651743271799" duration="84000" />
       <workItem from="1661678926780" duration="1583000" />
-      <workItem from="1662118098820" duration="7494000" />
+      <workItem from="1662118098820" duration="8299000" />
+      <workItem from="1662402428780" duration="9000" />
     </task>
     <task id="LOCAL-00001" summary="Revamped the API, clean up as well">
       <created>1650884879440</created>
@@ -190,7 +178,21 @@
       <option name="project" value="LOCAL" />
       <updated>1662118146233</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="[=] Fix bukkit api retardedness">
+      <created>1662129391039</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1662129391039</updated>
+    </task>
+    <task id="LOCAL-00011" summary="[/] Finally fix">
+      <created>1662129431052</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1662129431052</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,6 +210,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Revamped the API, clean up as well" />
     <MESSAGE value="Wrong JDK lol" />
     <MESSAGE value="Fix compile error" />
@@ -217,6 +221,8 @@
     <MESSAGE value="Fix default adapter registering double name" />
     <MESSAGE value="[/] Made API use UUIDs instead of names. (Fix for disguised players)" />
     <MESSAGE value="[=] Hopefully fix teamcity" />
-    <option name="LAST_COMMIT_MESSAGE" value="[=] Hopefully fix teamcity" />
+    <MESSAGE value="[=] Fix bukkit api retardedness" />
+    <MESSAGE value="[/] Finally fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="[/] Finally fix" />
   </component>
 </project>
