@@ -1,7 +1,7 @@
-package xyz.refinedev.nametag.adapter;
+package xyz.refinedev.api.nametag.adapter;
 
 import org.bukkit.ChatColor;
-import xyz.refinedev.nametag.setup.NameTagInfo;
+import xyz.refinedev.api.nametag.setup.NameTagInfo;
 import org.bukkit.entity.Player;
 
 public class DefaultNameTagAdapter extends NameTagAdapter {

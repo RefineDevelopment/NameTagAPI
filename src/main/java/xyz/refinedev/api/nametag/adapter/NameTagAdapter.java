@@ -1,11 +1,11 @@
-package xyz.refinedev.nametag.adapter;
+package xyz.refinedev.api.nametag.adapter;
 
-import xyz.refinedev.nametag.NameTagHandler;
-import xyz.refinedev.nametag.setup.NameTagInfo;
+import xyz.refinedev.api.nametag.setup.NameTagInfo;
+import xyz.refinedev.api.nametag.util.CC;
+import xyz.refinedev.api.nametag.NameTagHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
-import xyz.refinedev.nametag.util.CC;
 
 @Getter
 @AllArgsConstructor

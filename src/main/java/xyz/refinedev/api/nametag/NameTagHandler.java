@@ -1,16 +1,16 @@
-package xyz.refinedev.nametag;
+package xyz.refinedev.api.nametag;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.refinedev.nametag.adapter.NameTagAdapter;
-import xyz.refinedev.nametag.listener.NameTagListener;
-import xyz.refinedev.nametag.protocol.ScoreboardTeamPacketMod;
-import xyz.refinedev.nametag.setup.NameTagComparator;
-import xyz.refinedev.nametag.setup.NameTagInfo;
-import xyz.refinedev.nametag.setup.NameTagThread;
-import xyz.refinedev.nametag.setup.NameTagUpdate;
+import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
+import xyz.refinedev.api.nametag.listener.NameTagListener;
+import xyz.refinedev.api.nametag.protocol.ScoreboardTeamPacketMod;
+import xyz.refinedev.api.nametag.setup.NameTagComparator;
+import xyz.refinedev.api.nametag.setup.NameTagInfo;
+import xyz.refinedev.api.nametag.setup.NameTagThread;
+import xyz.refinedev.api.nametag.setup.NameTagUpdate;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -150,7 +150,7 @@ public class NameTagHandler {
         registeredTeams.add(newTeam);
 
         ScoreboardTeamPacketMod addPacket = newTeam.getTeamAddPacket();
-        this.plugin.getServer().getOnlinePlayers().forEach(player -> addPacket.sendToPlayer(player));
+        this.plugin.getServer().getOnlinePlayers().forEach(addPacket::sendToPlayer);
 
         return (newTeam);
     }

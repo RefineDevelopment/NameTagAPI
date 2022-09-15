@@ -1,4 +1,4 @@
-package xyz.refinedev.nametag.util;
+package xyz.refinedev.api.nametag.util;
 
 import org.bukkit.ChatColor;
 

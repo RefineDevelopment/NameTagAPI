@@ -1,4 +1,4 @@
-package xyz.refinedev.nametag.setup;
+package xyz.refinedev.api.nametag.setup;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;

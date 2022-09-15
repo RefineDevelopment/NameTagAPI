@@ -1,8 +1,8 @@
-package xyz.refinedev.nametag.setup;
+package xyz.refinedev.api.nametag.setup;
 
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.refinedev.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.NameTagHandler;
 
 import java.util.Iterator;
 import java.util.Map;

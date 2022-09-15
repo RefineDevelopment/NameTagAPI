@@ -1,4 +1,4 @@
-package xyz.refinedev.nametag.protocol;
+package xyz.refinedev.api.nametag.protocol;
 
 import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;

@@ -1,7 +1,7 @@
-package xyz.refinedev.nametag.setup;
+package xyz.refinedev.api.nametag.setup;
 
 import com.google.common.primitives.Ints;
-import xyz.refinedev.nametag.adapter.NameTagAdapter;
+import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
 
 import java.util.Comparator;
 

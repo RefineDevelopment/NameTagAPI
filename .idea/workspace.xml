@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="[]">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="595dedde-d0ef-487a-87ae-37fd3f3d7db4" name="Default Changelist" comment="Fix default adapter registering double name" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,9 +36,6 @@
       <facet id="NameTagAPI/invalid/Minecraft" />
     </ignored-facets>
   </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
   </component>
@@ -55,8 +50,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/xyz/refinedev/nametag/util" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -110,10 +104,7 @@
       <workItem from="1651307261117" duration="413000" />
       <workItem from="1651308058316" duration="1689000" />
       <workItem from="1651743271799" duration="84000" />
-      <workItem from="1661678926780" duration="1583000" />
-      <workItem from="1662118098820" duration="8299000" />
-      <workItem from="1662402428780" duration="9000" />
-      <workItem from="1662402450839" duration="295000" />
+      <workItem from="1653464860650" duration="34000" />
     </task>
     <task id="LOCAL-00001" summary="Revamped the API, clean up as well">
       <created>1650884879440</created>
@@ -164,56 +155,7 @@
       <option name="project" value="LOCAL" />
       <updated>1651311397575</updated>
     </task>
-    <task id="LOCAL-00008" summary="[/] Made API use UUIDs instead of names. (Fix for disguised players)">
-      <created>1661679288425</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1661679288425</updated>
-    </task>
-    <task id="LOCAL-00009" summary="[=] Hopefully fix teamcity">
-      <created>1662118146233</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1662118146233</updated>
-    </task>
-    <task id="LOCAL-00010" summary="[=] Fix bukkit api retardedness">
-      <created>1662129391039</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1662129391039</updated>
-    </task>
-    <task id="LOCAL-00011" summary="[/] Finally fix">
-      <created>1662129431052</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1662129431052</updated>
-    </task>
-    <task id="LOCAL-00012" summary="[]">
-      <created>1662402465808</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1662402465808</updated>
-    </task>
-    <task id="LOCAL-00013" summary="[]">
-      <created>1662402677714</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1662402677714</updated>
-    </task>
-    <task id="LOCAL-00014" summary="[]">
-      <created>1662402734751</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1662402734751</updated>
-    </task>
-    <option name="localTasksCounter" value="15" />
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,10 +171,9 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Revamped the API, clean up as well" />
     <MESSAGE value="Wrong JDK lol" />
     <MESSAGE value="Fix compile error" />
@@ -240,11 +181,6 @@
     <MESSAGE value="Whoops" />
     <MESSAGE value="Fix version" />
     <MESSAGE value="Fix default adapter registering double name" />
-    <MESSAGE value="[/] Made API use UUIDs instead of names. (Fix for disguised players)" />
-    <MESSAGE value="[=] Hopefully fix teamcity" />
-    <MESSAGE value="[=] Fix bukkit api retardedness" />
-    <MESSAGE value="[/] Finally fix" />
-    <MESSAGE value="[]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[]" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix default adapter registering double name" />
   </component>
 </project>

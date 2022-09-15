@@ -1,7 +1,7 @@
-package xyz.refinedev.nametag.util;
+package xyz.refinedev.api.nametag.util;
 
 import org.bukkit.scheduler.BukkitRunnable;
-import xyz.refinedev.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.NameTagHandler;
 
 public class TaskUtil {
 	

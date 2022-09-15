@@ -1,4 +1,4 @@
-package xyz.refinedev.nametag.listener;
+package xyz.refinedev.api.nametag.listener;
 
 import lombok.RequiredArgsConstructor;
 import org.bukkit.event.EventHandler;
@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import xyz.refinedev.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.NameTagHandler;
 
 @RequiredArgsConstructor
 public final class NameTagListener implements Listener {

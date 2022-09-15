@@ -1,7 +1,7 @@
-package xyz.refinedev.nametag.setup;
+package xyz.refinedev.api.nametag.setup;
 
 import lombok.Getter;
-import xyz.refinedev.nametag.protocol.ScoreboardTeamPacketMod;
+import xyz.refinedev.api.nametag.protocol.ScoreboardTeamPacketMod;
 
 import java.util.ArrayList;
 
