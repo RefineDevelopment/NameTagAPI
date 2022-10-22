@@ -44,7 +44,7 @@ public class NameTagHandler {
         String packageName = Bukkit.getServer().getClass().getPackage().getName();
         String version = packageName.substring(packageName.lastIndexOf('.') + 1);
         try {
-            Class<?> clazz = Class.forName("xyz.refinedev.api.nametag." + version);
+            Class<?> clazz = Class.forName("xyz.refinedev.api.nametag.protocol." + version);
             if (SBTeamNMS.class.isAssignableFrom(clazz)) {
                 NMS = (SBTeamNMS) clazz.getConstructor().newInstance();
             }
