@@ -2,12 +2,11 @@ package xyz.refinedev.api.nametag;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
-import xyz.refinedev.api.nametag.protocol.SBTeamNMS;
+import xyz.refinedev.api.nametag.protocol.ScoreboardTeamPacketMod;
 import xyz.refinedev.api.nametag.setup.NameTagComparator;
 import xyz.refinedev.api.nametag.setup.NameTagInfo;
 import xyz.refinedev.api.nametag.setup.NameTagThread;
@@ -33,7 +32,6 @@ public class NameTagHandler {
 
     private boolean initiated;
     private static int teamCreateIndex = 1;
-    private SBTeamNMS NMS;
 
     public NameTagHandler(JavaPlugin plugin) {
         instance = this;
@@ -41,16 +39,19 @@ public class NameTagHandler {
         this.plugin = plugin;
         this.initiated = true;
 
+<<<<<<< HEAD
+=======
         String packageName = Bukkit.getServer().getClass().getPackage().getName();
         String version = packageName.substring(packageName.lastIndexOf('.') + 1);
         try {
-            Class<?> clazz = Class.forName("xyz.refinedev.api.nametag.protocol." + version);
+            Class<?> clazz = Class.forName("xyz.refinedev.api.nametag." + version);
             if (SBTeamNMS.class.isAssignableFrom(clazz)) {
                 NMS = (SBTeamNMS) clazz.getConstructor().newInstance();
             }
         } catch (Exception ignored) {
         }
 
+>>>>>>> parent of 97d2685 ([+] Added multi version support (2))
         this.thread = new NameTagThread(plugin);
         this.thread.start();
 
@@ -94,7 +95,6 @@ public class NameTagHandler {
             this.reloadPlayer(toRefresh, refreshFor);
         }
     }
-
 
     /**
      * Apply the {@link NameTagUpdate} according to
@@ -141,8 +141,8 @@ public class NameTagHandler {
             teamInfoMap = teamMap.get(refreshFor.getUniqueId());
         }
 
-        SBTeamNMS nms = NMS.create(provided.getName(), Collections.singletonList(toRefresh.getName()), 3);
-        nms.sendToPlayer(refreshFor);
+        ScoreboardTeamPacketMod packet = new ScoreboardTeamPacketMod(provided.getName(), Collections.singletonList(toRefresh.getName()), 3);
+        packet.sendToPlayer(refreshFor);
 
         teamInfoMap.put(toRefresh.getUniqueId(), provided);
         teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
@@ -162,7 +162,7 @@ public class NameTagHandler {
         NameTagInfo newTeam = new NameTagInfo(String.valueOf(teamCreateIndex++), prefix, suffix);
         registeredTeams.add(newTeam);
 
-        SBTeamNMS addPacket = newTeam.getTeamAddPacket();
+        ScoreboardTeamPacketMod addPacket = newTeam.getTeamAddPacket();
         this.plugin.getServer().getOnlinePlayers().forEach(addPacket::sendToPlayer);
 
         return (newTeam);
