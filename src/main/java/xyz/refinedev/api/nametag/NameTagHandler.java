@@ -38,6 +38,7 @@ public class NameTagHandler {
 
         this.plugin = plugin;
         this.initiated = true;
+
         this.thread = new NameTagThread(plugin);
         this.thread.start();
 
