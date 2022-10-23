@@ -83,6 +83,7 @@ public class NameTagHandler {
         }
     }
 
+
     /**
      * Apply the {@link NameTagUpdate} according to
      * the specified conditions to the viewer/target
