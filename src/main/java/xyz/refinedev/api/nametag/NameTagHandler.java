@@ -38,20 +38,6 @@ public class NameTagHandler {
 
         this.plugin = plugin;
         this.initiated = true;
-
-<<<<<<< HEAD
-=======
-        String packageName = Bukkit.getServer().getClass().getPackage().getName();
-        String version = packageName.substring(packageName.lastIndexOf('.') + 1);
-        try {
-            Class<?> clazz = Class.forName("xyz.refinedev.api.nametag." + version);
-            if (SBTeamNMS.class.isAssignableFrom(clazz)) {
-                NMS = (SBTeamNMS) clazz.getConstructor().newInstance();
-            }
-        } catch (Exception ignored) {
-        }
-
->>>>>>> parent of 97d2685 ([+] Added multi version support (2))
         this.thread = new NameTagThread(plugin);
         this.thread.start();
 
