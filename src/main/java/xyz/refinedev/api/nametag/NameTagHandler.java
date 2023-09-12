@@ -1,5 +1,7 @@
 package xyz.refinedev.api.nametag;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
@@ -55,7 +57,6 @@ public class NameTagHandler {
      */
     private final JavaPlugin plugin;
 
-    private boolean initiated;
     private static int teamCreateIndex = 1;
 
     public NameTagHandler(JavaPlugin plugin) {
@@ -67,8 +68,11 @@ public class NameTagHandler {
      * Initializing logic of this NameTag Handler
      */
     public void init() {
-        this.initiated = true;
-
+        if (PacketEvents.getAPI() == null || !PacketEvents.getAPI().isLoaded()) {
+            PacketEvents.setAPI(SpigotPacketEventsBuilder.build(plugin));
+            PacketEvents.getAPI().getSettings().checkForUpdates(false).bStats(false);
+            PacketEvents.getAPI().load();
+        }
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
     }
 
@@ -76,7 +80,9 @@ public class NameTagHandler {
      * Shutdown Logic of this NameTag Handler
      */
     public void unload() {
-        this.initiated = false;
+        if (!PacketEvents.getAPI().isInitialized()) {
+            PacketEvents.getAPI().init();
+        }
         this.thread.stopExecuting();
     }
 
