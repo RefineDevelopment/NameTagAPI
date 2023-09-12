@@ -1,30 +1,32 @@
 package xyz.refinedev.api.nametag.listener;
 
 import lombok.RequiredArgsConstructor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import xyz.refinedev.api.nametag.NameTagHandler;
 
 @RequiredArgsConstructor
 public final class NameTagListener implements Listener {
 
-    private final NameTagHandler instance;
+    private final NameTagHandler handler;
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        instance.getLoggedIn().add(event.getPlayer().getUniqueId());
+        Player player = event.getPlayer();
 
-        instance.initiatePlayer(event.getPlayer());
-        instance.reloadPlayer(event.getPlayer());
-        instance.reloadOthersFor(event.getPlayer());
+        this.handler.initiatePlayer(player);
+        this.handler.reloadPlayer(player);
+        this.handler.reloadOthersFor(player);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        instance.getLoggedIn().remove(event.getPlayer().getUniqueId());
-        instance.getTeamMap().remove(event.getPlayer().getUniqueId());
+        Player player = event.getPlayer();
+
+        this.handler.unloadPlayer(player);
     }
 }

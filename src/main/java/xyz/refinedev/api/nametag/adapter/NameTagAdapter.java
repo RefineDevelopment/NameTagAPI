@@ -11,11 +11,23 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public abstract class NameTagAdapter {
 
-    private final String name;
-    private final int weight;
 
+    /**
+     * Fetch a Player's NameTag update information
+     *
+     * @param toRefresh  {@link Player Target} the player getting their nameTag Refreshed
+     * @param refreshFor {@link Player Viewer} the player that will be receiving the update
+     * @return           {@link NameTagInfo} The NameTag Entry used for updates
+     */
     public abstract NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor);
 
+    /**
+     * Create a NameTagInfo from raw prefix and suffix
+     *
+     * @param prefix {@link String prefix}
+     * @param suffix {@link String suffix}
+     * @return       {@link NameTagInfo Name Tag info}
+     */
     public NameTagInfo createNameTag(String prefix, String suffix) {
         return (NameTagHandler.getInstance().getOrCreate(CC.translate(prefix), CC.translate(suffix)));
     }

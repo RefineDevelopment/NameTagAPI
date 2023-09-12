@@ -6,11 +6,13 @@ import org.bukkit.entity.Player;
 
 public class DefaultNameTagAdapter extends NameTagAdapter {
 
-    public DefaultNameTagAdapter() {
-        super("Default Provider", 0);
-    }
-
-    @Override
+    /**
+     * Fetch a Player's NameTag update information
+     *
+     * @param toRefresh  {@link Player Target} the player getting their nameTag Refreshed
+     * @param refreshFor {@link Player Viewer} the player that will be receiving the update
+     * @return           {@link NameTagInfo} The NameTag Entry used for updates
+     */
     public NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor) {
         return (createNameTag(ChatColor.GREEN.toString(), ""));
     }
