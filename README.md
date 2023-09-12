@@ -7,7 +7,7 @@ Refine's NameTag API | Fork of Hylist's/Frozenorb's API
 - Easy to use
 
 ## Installing
-You can either shade this repository into your plugin, or run it as a plugin by itself.
+You need to shade this repository into your plugin.
 
 1. Clone this repository
 2. Enter the directory: `cd NameTagAPI`
