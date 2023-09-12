@@ -35,7 +35,7 @@
         </repository>
         <repository>
             <id>refine-public</id>
-            <url>https://maven.insidious.cc/repository/public-repo/</url>
+            <url>https://maven.refinedev.xyz/repository/public-repo/</url>
         </repository>
         <repository>
             <id>codemc-snapshots</id>
@@ -46,7 +46,7 @@
     <distributionManagement>
         <repository>
             <id>refine-releases</id>
-            <url>https://maven.insidious.cc/repository/maven-releases/</url>
+            <url>https://maven.refinedev.xyz/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
