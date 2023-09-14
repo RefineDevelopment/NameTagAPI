@@ -4,6 +4,14 @@ import org.bukkit.ChatColor;
 import xyz.refinedev.api.nametag.setup.NameTagInfo;
 import org.bukkit.entity.Player;
 
+/**
+ * This Project is property of Refine Development © 2021 - 2023
+ * Redistribution of this Project is not allowed
+ *
+ * @author Drizzy
+ * @since 9/12/2023
+ * @version NameTagAPI
+ */
 public class DefaultNameTagAdapter extends NameTagAdapter {
 
     /**
@@ -14,7 +22,7 @@ public class DefaultNameTagAdapter extends NameTagAdapter {
      * @return           {@link NameTagInfo} The NameTag Entry used for updates
      */
     public NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor) {
-        return (createNameTag(ChatColor.GREEN.toString(), ""));
+        return (createNameTag(ChatColor.GREEN.toString(), ChatColor.RED.toString() + " [Gay]"));
     }
 
 }

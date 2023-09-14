@@ -1,8 +1,5 @@
 package xyz.refinedev.api.nametag;
 
-import com.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
 
@@ -24,6 +21,14 @@ import xyz.refinedev.api.nametag.setup.NameTagUpdate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * This Project is property of Refine Development © 2021 - 2023
+ * Redistribution of this Project is not allowed
+ *
+ * @author Drizzy
+ * @since 9/12/2023
+ * @version NameTagAPI
+ */
 @Getter @Setter @Log4j2
 public class NameTagHandler {
 
@@ -68,11 +73,6 @@ public class NameTagHandler {
      * Initializing logic of this NameTag Handler
      */
     public void init() {
-        if (PacketEvents.getAPI() == null || !PacketEvents.getAPI().isLoaded()) {
-            PacketEvents.setAPI(SpigotPacketEventsBuilder.build(plugin));
-            PacketEvents.getAPI().getSettings().checkForUpdates(false).bStats(false);
-            PacketEvents.getAPI().load();
-        }
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
     }
 
@@ -80,9 +80,6 @@ public class NameTagHandler {
      * Shutdown Logic of this NameTag Handler
      */
     public void unload() {
-        if (!PacketEvents.getAPI().isInitialized()) {
-            PacketEvents.getAPI().init();
-        }
         this.thread.stopExecuting();
     }
 
@@ -161,25 +158,21 @@ public class NameTagHandler {
         NameTagInfo provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
         if (provided == null) return;
 
-        Map<UUID, NameTagInfo> teamInfoMap = new Object2ObjectOpenHashMap<>();
+        Map<UUID, NameTagInfo> teamInfoMap = new HashMap<>();
 
         if (this.teamMap.containsKey(refreshFor.getUniqueId())) {
             teamInfoMap = this.teamMap.get(refreshFor.getUniqueId());
         }
 
-        ScoreboardPacket packet = new ScoreboardPacket(provided.getName(), Collections.singletonList(toRefresh.getName()), 3);
+        ScoreboardPacket packet = new ScoreboardPacket(
+                provided.getName(),
+                Collections.singletonList(toRefresh.getName()),
+                3
+        );
         packet.sendToPlayer(refreshFor);
 
         teamInfoMap.put(toRefresh.getUniqueId(), provided);
         this.teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
-    }
-
-    public void initiatePlayer(Player player) {
-        this.registeredTeams.forEach(teamInfo -> teamInfo.getTeamAddPacket().sendToPlayer(player));
-    }
-
-    public void unloadPlayer(Player player) {
-        this.teamMap.remove(player.getUniqueId());
     }
 
     public NameTagInfo getOrCreate(String prefix, String suffix) {
@@ -189,12 +182,20 @@ public class NameTagHandler {
             }
         }
 
-        NameTagInfo newTeam = new NameTagInfo(Integer.toString(teamCreateIndex++), prefix, suffix);
+        NameTagInfo newTeam = new NameTagInfo(String.valueOf(teamCreateIndex++), prefix, suffix);
         this.registeredTeams.add(newTeam);
 
         ScoreboardPacket addPacket = newTeam.getTeamAddPacket();
         Bukkit.getOnlinePlayers().forEach(addPacket::sendToPlayer);
 
         return (newTeam);
+    }
+
+    public void initiatePlayer(Player player) {
+        this.registeredTeams.forEach(teamInfo -> teamInfo.getTeamAddPacket().sendToPlayer(player));
+    }
+
+    public void unloadPlayer(Player player) {
+        this.teamMap.remove(player.getUniqueId());
     }
 }

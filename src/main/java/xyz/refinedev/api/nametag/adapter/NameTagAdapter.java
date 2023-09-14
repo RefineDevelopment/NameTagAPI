@@ -7,6 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
+/**
+ * This Project is property of Refine Development © 2021 - 2023
+ * Redistribution of this Project is not allowed
+ *
+ * @author Drizzy
+ * @since 9/12/2023
+ * @version NameTagAPI
+ */
 @Getter
 @AllArgsConstructor
 public abstract class NameTagAdapter {

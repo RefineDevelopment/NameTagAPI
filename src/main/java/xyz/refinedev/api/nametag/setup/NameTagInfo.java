@@ -2,9 +2,8 @@ package xyz.refinedev.api.nametag.setup;
 
 import lombok.Getter;
 import lombok.Setter;
-import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
 
-import java.util.ArrayList;
+import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
 
 @Getter @Setter
 public class NameTagInfo {
@@ -18,6 +17,6 @@ public class NameTagInfo {
         this.name = name;
         this.prefix = prefix;
         this.suffix = suffix;
-        this.teamAddPacket = new ScoreboardPacket(name, prefix, suffix, new ArrayList<>(), 0);
+        this.teamAddPacket = new ScoreboardPacket(name, prefix, suffix, 0);
     }
 }

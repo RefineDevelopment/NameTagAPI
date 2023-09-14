@@ -22,24 +22,21 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spigot.version>1.20-R0.1-SNAPSHOT</spigot.version>
     </properties>
 
     <repositories>
+        <repository>
+            <id>nms-repo</id>
+            <url>https://repo.codemc.io/repository/nms/</url>
+        </repository>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>funkemunky-releases</id>
-            <url>https://nexus.funkemunky.cc/content/repositories/releases/</url>
-        </repository>
-        <repository>
             <id>refine-public</id>
             <url>https://maven.refinedev.xyz/repository/public-repo/</url>
-        </repository>
-        <repository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
     </repositories>
 
@@ -51,19 +48,6 @@
     </distributionManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.retrooper.packetevents</groupId>
-            <artifactId>spigot</artifactId>
-            <version>2.0.1</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!--Annotations-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -81,9 +65,23 @@
 
         <!--Spigot-->
         <dependency>
-            <groupId>org.paperspigot</groupId>
-            <artifactId>PaperSpigot</artifactId>
-            <version>1.8.8</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>${spigot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${spigot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Protocol -->
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>5.1.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -122,7 +120,6 @@
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <shadedArtifactAttached>false</shadedArtifactAttached>
-                    <finalName>${project.artifactId}</finalName>
                     <minimizeJar>true</minimizeJar>
                     <filters>
                         <filter>
@@ -132,20 +129,6 @@
                             </excludes>
                         </filter>
                     </filters>
-                    <relocations>
-                        <relocation>
-                            <pattern>com.github.retrooper</pattern>
-                            <shadedPattern>xyz.refinedev.lib.com.github.retrooper</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>io.github.retrooper</pattern>
-                            <shadedPattern>xyz.refinedev.lib.io.github.retrooper</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.kyori</pattern>
-                            <shadedPattern>xyz.refinedev.lib.com.github.retrooper.libs.net.kyori</shadedPattern>
-                        </relocation>
-                    </relocations>
                 </configuration>
                 <executions>
                     <execution>

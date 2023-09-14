@@ -4,6 +4,8 @@ Refine's NameTag API | Fork of Hylist's/Frozenorb's API
 ## Features
 - Support for Per-viewer NameTag changing
 - Asynchronous and Optimized
+- Support for Hex-Color (1.16+)
+- Supports all Major Versions (1.8, 1.12, 1.16, 1.17+)
 - Easy to use
 
 ## Installing

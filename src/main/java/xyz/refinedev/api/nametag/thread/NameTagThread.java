@@ -9,6 +9,14 @@ import xyz.refinedev.api.nametag.setup.NameTagUpdate;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * This Project is property of Refine Development © 2021 - 2023
+ * Redistribution of this Project is not allowed
+ *
+ * @author Drizzy
+ * @since 9/12/2023
+ * @version NameTagAPI
+ */
 @Getter @Log4j2
 public class NameTagThread extends Thread {
 
