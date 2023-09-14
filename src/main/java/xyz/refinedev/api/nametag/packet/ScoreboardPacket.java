@@ -48,6 +48,12 @@ public class ScoreboardPacket {
         container.getModifier().writeDefaults();
         switch (VersionUtil.MINOR_VERSION) {
             case 8: {
+                if (prefix.length() > 16) {
+                    prefix = prefix.substring(0, 16);
+                }
+                if (suffix.length() > 16) {
+                    suffix = suffix.substring(0, 16);
+                }
                 container.getStrings()
                         .writeSafely(0, name) // Team Name
                         .writeSafely(1, name) // Display name
@@ -61,6 +67,12 @@ public class ScoreboardPacket {
                 break;
             }
             case 12: {
+                if (prefix.length() > 16) {
+                    prefix = prefix.substring(0, 16);
+                }
+                if (suffix.length() > 16) {
+                    suffix = suffix.substring(0, 16);
+                }
                 container.getStrings()
                         .writeSafely(0, name) // Team Name
                         .writeSafely(1, name) // Display name
