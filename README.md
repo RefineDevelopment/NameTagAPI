@@ -59,7 +59,7 @@ public class ExampleNameTagAdapter extends NameTagAdapter {
      * @return           {@link NameTagInfo} The NameTag Entry used for updates
      */
     public NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor) {
-        return (this.createNameTag(ChatColor.GREEN + toRefresh.getDisplayName(), ""));
+        return (this.createNameTag(ChatColor.RED + "[Refine]", ""));
     }
 }
 ```
