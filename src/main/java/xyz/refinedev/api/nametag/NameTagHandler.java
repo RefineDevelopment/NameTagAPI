@@ -122,7 +122,7 @@ public class NameTagHandler {
      * @param refreshFor {@link Player} viewer
      */
     public void reloadOthersFor(Player refreshFor) {
-        for (Player toRefresh : this.plugin.getServer().getOnlinePlayers()) {
+        for (Player toRefresh : Bukkit.getOnlinePlayers()) {
             if (refreshFor == toRefresh) continue;
             this.reloadPlayer(toRefresh, refreshFor);
         }

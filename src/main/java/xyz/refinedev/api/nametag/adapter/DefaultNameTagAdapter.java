@@ -22,7 +22,7 @@ public class DefaultNameTagAdapter extends NameTagAdapter {
      * @return           {@link NameTagInfo} The NameTag Entry used for updates
      */
     public NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor) {
-        return (createNameTag(ChatColor.GREEN.toString(), ChatColor.RED.toString() + " [Gay]"));
+        return (createNameTag(ChatColor.RED + "[Refine] " + ChatColor.WHITE, ""));
     }
 
 }

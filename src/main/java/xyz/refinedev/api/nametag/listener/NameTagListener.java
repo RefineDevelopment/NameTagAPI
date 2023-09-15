@@ -24,7 +24,7 @@ public final class NameTagListener implements Listener {
 
     private final NameTagHandler handler;
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
@@ -33,7 +33,7 @@ public final class NameTagListener implements Listener {
         this.handler.reloadOthersFor(player);
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 

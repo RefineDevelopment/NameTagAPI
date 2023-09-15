@@ -169,7 +169,7 @@ public class ScoreboardPacket {
             }
             default: {
                 if (!VersionUtil.isModern()) {
-                    throw new IllegalArgumentException("[NameTagAPI] Version not support!");
+                    throw new IllegalArgumentException("[NameTagAPI] Version not supported!");
                 }
                 container.getStrings().writeSafely(0, name); // Team Name
                 final StructureModifier<Integer> integers = container.getIntegers();
