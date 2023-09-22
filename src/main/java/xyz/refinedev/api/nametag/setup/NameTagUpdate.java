@@ -6,8 +6,9 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * This Project is property of Refine Development © 2021 - 2023
- * Redistribution of this Project is not allowed
+ * This Project is property of Refine Development.
+ * Copyright © 2023, All Rights Reserved.
+ * Redistribution of this Project is not allowed.
  *
  * @author Drizzy
  * @since 9/12/2023
