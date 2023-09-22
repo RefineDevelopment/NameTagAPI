@@ -168,8 +168,6 @@ public class NameTagHandler {
             teamInfoMap = this.teamMap.get(refreshFor.getUniqueId());
         }
 
-        log.info("[NameTagAPI-Debug] Sending update packet");
-
         ScoreboardPacket packet = new ScoreboardPacket(
                 provided.getName(),
                 Collections.singletonList(toRefresh.getName()),
@@ -190,8 +188,6 @@ public class NameTagHandler {
 
         NameTagInfo newTeam = new NameTagInfo(String.valueOf(teamCreateIndex++), prefix, suffix);
         this.registeredTeams.add(newTeam);
-
-        log.info("[NameTagAPI-Debug] Sending create packet");
 
         ScoreboardPacket addPacket = newTeam.getTeamAddPacket();
         Bukkit.getOnlinePlayers().forEach(addPacket::sendToPlayer);
