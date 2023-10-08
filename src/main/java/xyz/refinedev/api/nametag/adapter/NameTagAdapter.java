@@ -33,11 +33,12 @@ public abstract class NameTagAdapter {
     /**
      * Create a NameTagInfo from raw prefix and suffix
      *
+     * @param name   {@link String name}
      * @param prefix {@link String prefix}
      * @param suffix {@link String suffix}
      * @return       {@link NameTagInfo Name Tag info}
      */
-    public NameTagInfo createNameTag(String prefix, String suffix) {
-        return (NameTagHandler.getInstance().getOrCreate(CC.translate(prefix), CC.translate(suffix)));
+    public NameTagInfo createNameTag(String name, String prefix, String suffix) {
+        return (NameTagHandler.getInstance().getOrCreate(name, CC.translate(prefix), CC.translate(suffix)));
     }
 }

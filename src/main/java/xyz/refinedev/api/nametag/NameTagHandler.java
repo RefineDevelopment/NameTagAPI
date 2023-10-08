@@ -180,14 +180,14 @@ public class NameTagHandler {
         this.teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
     }
 
-    public NameTagInfo getOrCreate(String prefix, String suffix) {
+    public NameTagInfo getOrCreate(String name, String prefix, String suffix) {
         for (NameTagInfo teamInfo : registeredTeams) {
-            if (teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
+            if (teamInfo.getName().equalsIgnoreCase(name)) {
                 return (teamInfo);
             }
         }
 
-        NameTagInfo newTeam = new NameTagInfo(String.valueOf(teamCreateIndex++), prefix, suffix);
+        NameTagInfo newTeam = new NameTagInfo(name, prefix, suffix);
         this.registeredTeams.add(newTeam);
 
         ScoreboardPacket addPacket = newTeam.getTeamAddPacket();
