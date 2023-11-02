@@ -1,5 +1,15 @@
 package xyz.refinedev.api.nametag;
 
+import com.github.retrooper.packetevents.PacketEventsAPI;
+import com.github.retrooper.packetevents.manager.server.ServerManager;
+import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.github.retrooper.packetevents.protocol.player.UserProfile;
+import com.github.retrooper.packetevents.util.adventure.AdventureSerializer;
+import com.github.retrooper.packetevents.wrapper.PacketWrapper;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfo;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfoUpdate;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
 
@@ -11,12 +21,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;
 import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
+import xyz.refinedev.api.nametag.listener.DisguiseListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
-import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
-import xyz.refinedev.api.nametag.setup.NameTagInfo;
+import xyz.refinedev.api.nametag.setup.NameTagTeam;
 import xyz.refinedev.api.nametag.thread.NameTagThread;
 import xyz.refinedev.api.nametag.setup.NameTagUpdate;
+import xyz.refinedev.api.nametag.util.PacketUtil;
+import xyz.refinedev.api.nametag.util.ColorUtil;
+import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +47,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter @Setter @Log4j2
 public class NameTagHandler {
 
+    private static int TEAM_INDEX = 1;
+
     /**
      * Static instance of this handler
      */
@@ -41,14 +57,18 @@ public class NameTagHandler {
     /**
      * This map stores all the current NameTag info of all targets per viewer.
      * <p>
-     *           <center>Viewer -> Target -> {@link NameTagInfo}</center>
+     *           <center>Viewer -> Target -> {@link NameTagTeam}</center>
      * </p>
      */
-    private final Map<UUID, Map<UUID, NameTagInfo>> teamMap = new ConcurrentHashMap<>();
+    private final Map<UUID, Map<UUID, NameTagTeam>> teamMap = new ConcurrentHashMap<>();
     /**
      * All registered teams are stored here
      */
-    private final List<NameTagInfo> registeredTeams = ObjectLists.synchronize(new ObjectArrayList<>());
+    private final List<NameTagTeam> registeredTeams = ObjectLists.synchronize(new ObjectArrayList<>());
+    /**
+     * The plugin registering this NameTag Handler
+     */
+    private final JavaPlugin plugin;
     /**
      * NameTag Adapter of this instance
      */
@@ -58,12 +78,8 @@ public class NameTagHandler {
      * ticking and updating the NameTags
      */
     private NameTagThread thread;
-    /**
-     * The plugin registering this Tablist Handler
-     */
-    private final JavaPlugin plugin;
-
-    private static int teamCreateIndex = 1;
+    private PacketEventsAPI<?> packetEvents;
+    private boolean collisionEnabled;
 
     public NameTagHandler(JavaPlugin plugin) {
         instance = this;
@@ -71,9 +87,14 @@ public class NameTagHandler {
     }
 
     /**
-     * Initializing logic of this NameTag Handler
+     * Set up the PacketEvents instance of this NameTagHandler Handler.
+     * We let the plugin initialize and handle the PacketEvents instance.
      */
-    public void init() {
+    public void init(PacketEventsAPI<?> packetEventsAPI) {
+        this.packetEvents = packetEventsAPI;
+        this.adapter = new DefaultNameTagAdapter();
+
+        this.packetEvents.getEventManager().registerListener(new DisguiseListener());
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
     }
 
@@ -85,7 +106,7 @@ public class NameTagHandler {
     }
 
     public void registerAdapter(NameTagAdapter adapter, long ticks) {
-        this.adapter = adapter;
+        this.adapter = adapter == null ? new DefaultNameTagAdapter() : adapter;
 
         if (ticks < 1L) {
             log.info("[{}] Provided refresh tick rate for NameTag is too low, reverting to 2 ticks!", plugin.getName());
@@ -94,6 +115,37 @@ public class NameTagHandler {
 
         this.thread = new NameTagThread(this, ticks);
         this.thread.start();
+    }
+
+    /**
+     * This method is only used once on join to create all
+     * the teams for our cache AND the player. It's only used once for
+     * the first player joining the server.
+     *
+     * @param player {@link Player} Target
+     */
+    public void createTeams(Player player) {
+        this.adapter.fetchNameTag(player, player);
+    }
+
+    /**
+     * Send all {@link NameTagTeam} teams to this player
+     *
+     * @param player {@link Player} Target
+     */
+    public void initiatePlayer(Player player) {
+        for ( NameTagTeam teamInfo : this.registeredTeams ) {
+            PacketUtil.sendPacket(player, teamInfo.getCreatePacket());
+        }
+    }
+
+    /**
+     * Unload the player's cached data
+     *
+     * @param player {@link Player} Target
+     */
+    public void unloadPlayer(Player player) {
+        this.teamMap.remove(player.getUniqueId());
     }
 
     /**
@@ -155,52 +207,80 @@ public class NameTagHandler {
         }
     }
 
-    public void createTeams(Player player) {
-        this.adapter.fetchNameTag(player, player);
-    }
-
     public void reloadPlayerInternal(Player toRefresh, Player refreshFor) {
-        NameTagInfo provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
+        NameTagTeam provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
         if (provided == null) return;
 
-        Map<UUID, NameTagInfo> teamInfoMap = new HashMap<>();
+        Map<UUID, NameTagTeam> teamInfoMap = new HashMap<>();
 
         if (this.teamMap.containsKey(refreshFor.getUniqueId())) {
             teamInfoMap = this.teamMap.get(refreshFor.getUniqueId());
         }
 
-        ScoreboardPacket packet = new ScoreboardPacket(
-                provided.getName(),
-                Collections.singletonList(toRefresh.getName()),
-                3
-        );
-        packet.sendToPlayer(refreshFor);
+        //TODO: Sort Priority system, by sending remove packets!!
+        WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
+        PacketUtil.sendPacket(refreshFor, packet);
+
+        // In 1.16, the issue arises that hex color does not apply to the name of the player.
+        // This is due to the ScoreboardTeam color being applied to the name, which is a plain enum with normal colors.
+        // It does not support Hex Colors, for Teams, I get the nearest ChatColor to the hex color but for displaying in tablist,
+        // we can just use display name packet which will apply HexColor.
+        if (VersionUtil.canHex()) {
+            ServerManager manager = this.packetEvents.getServerManager();
+
+            UserProfile profile = new UserProfile(toRefresh.getUniqueId(), toRefresh.getName());
+            String text = ColorUtil.color(provided.getPrefix() + toRefresh.getName() + provided.getSuffix());
+
+            PacketWrapper<?> display;
+            if (manager.getVersion().isNewerThanOrEquals(ServerVersion.V_1_19_3)) {
+                WrapperPlayServerPlayerInfoUpdate.PlayerInfo data = new WrapperPlayServerPlayerInfoUpdate.PlayerInfo(
+                        profile,
+                        true,
+                        0,
+                        null,
+                        AdventureSerializer.fromLegacyFormat(text),
+                        null
+                );
+                display = new WrapperPlayServerPlayerInfoUpdate(WrapperPlayServerPlayerInfoUpdate.Action.UPDATE_DISPLAY_NAME, data);
+            } else {
+                WrapperPlayServerPlayerInfo.PlayerData data = new WrapperPlayServerPlayerInfo.PlayerData(
+                        AdventureSerializer.fromLegacyFormat(text),
+                        profile,
+                        null,
+                        0
+                );
+                display = new WrapperPlayServerPlayerInfo(WrapperPlayServerPlayerInfo.Action.UPDATE_DISPLAY_NAME, data);
+            }
+
+            PacketUtil.sendPacket(refreshFor, display);
+        }
 
         teamInfoMap.put(toRefresh.getUniqueId(), provided);
         this.teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
     }
 
-    public NameTagInfo getOrCreate(String prefix, String suffix) {
-        for (NameTagInfo teamInfo : registeredTeams) {
+    /**
+     * Get a {@link NameTagTeam} associated with the given prefix and suffix.
+     * If we don't have one for these prefixes and suffixes, then we make one and send it to everyone.
+     *
+     * @param prefix {@link String} Raw Prefix
+     * @param suffix {@link String} Raw Suffix
+     * @return       {@link NameTagTeam} Associated Team
+     */
+    public NameTagTeam getOrCreate(String prefix, String suffix) {
+        for ( NameTagTeam teamInfo : registeredTeams) {
             if (teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
                 return (teamInfo);
             }
         }
 
-        NameTagInfo newTeam = new NameTagInfo(String.valueOf(teamCreateIndex++), prefix, suffix);
+        TEAM_INDEX++;
+
+        NameTagTeam newTeam = new NameTagTeam("boltNT" + TEAM_INDEX, prefix, suffix, collisionEnabled);
         this.registeredTeams.add(newTeam);
 
-        ScoreboardPacket addPacket = newTeam.getTeamAddPacket();
-        Bukkit.getOnlinePlayers().forEach(addPacket::sendToPlayer);
+        PacketUtil.broadcast(newTeam.getCreatePacket());
 
-        return (newTeam);
-    }
-
-    public void initiatePlayer(Player player) {
-        this.registeredTeams.forEach(teamInfo -> teamInfo.getTeamAddPacket().sendToPlayer(player));
-    }
-
-    public void unloadPlayer(Player player) {
-        this.teamMap.remove(player.getUniqueId());
+        return newTeam;
     }
 }

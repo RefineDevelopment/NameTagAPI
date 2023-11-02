@@ -47,7 +47,7 @@ To setup NameTagAdapter, you can easily use
 
 ```java
 import org.bukkit.entity.Player;
-import xyz.refinedev.api.nametag.setup.NameTagInfo;
+import xyz.refinedev.api.nametag.setup.NameTagTeam;
 
 public class ExampleNameTagAdapter extends NameTagAdapter {
 
@@ -56,9 +56,9 @@ public class ExampleNameTagAdapter extends NameTagAdapter {
      *
      * @param toRefresh  {@link Player Target} the player getting their nameTag Refreshed
      * @param refreshFor {@link Player Viewer} the player that will be receiving the update
-     * @return           {@link NameTagInfo} The NameTag Entry used for updates
+     * @return           {@link NameTagTeam} The NameTag Entry used for updates
      */
-    public NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor) {
+    public NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor) {
         return (this.createNameTag(ChatColor.RED + "[Refine]", ""));
     }
 }

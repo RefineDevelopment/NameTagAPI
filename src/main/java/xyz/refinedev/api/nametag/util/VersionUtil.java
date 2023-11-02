@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
  */
 public class VersionUtil {
 
-    protected static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+    public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     public static final int MINOR_VERSION = Integer.parseInt(VERSION.split("_")[1]);
 
     public static boolean isModern() {
@@ -21,8 +21,6 @@ public class VersionUtil {
     }
 
     public static boolean canHex() {
-        String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
-        String minorVer = split[1];
-        return Integer.parseInt(minorVer) >= 16;
+        return MINOR_VERSION >= 16;
     }
 }
