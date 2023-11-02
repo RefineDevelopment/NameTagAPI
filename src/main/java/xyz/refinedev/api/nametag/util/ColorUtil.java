@@ -26,10 +26,26 @@ public class ColorUtil {
      * @return      {@link NamedTextColor} Last Color or WHITE if none is present.
      */
     public NamedTextColor getLastColor(String input) {
-        String prefixColor = ChatColor.getLastColors(color(input));
+        net.md_5.bungee.api.ChatColor color = getLastColors(input);
         NamedTextColor textColor = NamedTextColor.WHITE;
 
-        if (prefixColor.isEmpty()) return textColor;
+        if (color == null) return textColor;
+
+        // I couldn't really find a direct conversion, but in case of bungee's color, it provides java color which be used to convert to adventure's color
+        TextColor parsed = TextColor.color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue());
+        return NamedTextColor.nearestTo(parsed);
+    }
+
+    /**
+     * Get last colors from a string in form of {@link net.md_5.bungee.api.ChatColor}
+     *
+     * @param input {@link String} The string from which we extract color
+     * @return      {@link net.md_5.bungee.api.ChatColor}
+     */
+    public net.md_5.bungee.api.ChatColor getLastColors(String input) {
+        String prefixColor = ChatColor.getLastColors(color(input));
+
+        if (prefixColor.isEmpty()) return null;
 
         net.md_5.bungee.api.ChatColor color;
 
@@ -43,7 +59,7 @@ public class ColorUtil {
                 // If the color is not a hex color, then it's a normal color code
                 val bukkitColor = ChatColor.getByChar(prefixColor.substring(prefixColor.length() - 1));
                 if (bukkitColor == null) {
-                    return textColor;
+                    return null;
                 }
                 color = bukkitColor.asBungee();
             }
@@ -51,14 +67,11 @@ public class ColorUtil {
             // Obviously in older versions, hex color does not exist, so we just parse it normally
             val bukkitColor = ChatColor.getByChar(prefixColor.substring(prefixColor.length() - 1));
             if (bukkitColor == null) {
-                return textColor;
+                return null;
             }
             color = bukkitColor.asBungee();
         }
-
-        // I couldn't really find a direct conversion, but in case of bungee's color, it provides java color which be used to convert to adventure's color
-        TextColor parsed = TextColor.color(color.getColor().getRed(), color.getColor().getGreen(), color.getColor().getBlue());
-        return NamedTextColor.nearestTo(parsed);
+        return color;
     }
 
     /**

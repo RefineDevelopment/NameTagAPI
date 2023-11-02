@@ -79,11 +79,12 @@ public class NameTagHandler {
      */
     private NameTagThread thread;
     private PacketEventsAPI<?> packetEvents;
-    private boolean collisionEnabled;
+    private boolean collisionEnabled, debugMode;
 
     public NameTagHandler(JavaPlugin plugin) {
         instance = this;
         this.plugin = plugin;
+        this.debugMode = Boolean.getBoolean("BDebug");
     }
 
     /**
