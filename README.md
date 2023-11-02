@@ -30,20 +30,31 @@ Add this to your `pom.xml` `<dependencies>`:
 <dependency>
   <groupId>xyz.refinedev.api</groupId>
   <artifactId>NameTagAPI</artifactId>
-  <version>2.0</version> <!-- At time of writing, 1.0-SNAPSHOT is latest version.  See the pom.xml for the latest version -->
-  <scope>compile</scope> <!-- Change scope to 'provided' if you are running the api as a plugin rather than shading it -->
+  <version>2.1</version> 
+  <scope>compile</scope>
 </dependency>
 ```
 
 ## Usage
 
-You can initiate and register a TablistAdapter using the following code
+You can initiate and register a NameTagAdapter using the following code
 ```java
-NameTagHandler nameTagHandler = new NameTagHandler(plugin);
-nameTagHandler.registerAdapter(new DefaultNameTagAdapter())
+import xyz.refinedev.api.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;
+
+public class ExamplePlugin extends JavaPlugin {
+
+    private NameTagHandler nameTagHandler;
+
+    @Override
+    public void onEnable() {
+        this.nameTagHandler = new NameTagHandler(this);
+        this.nameTagHandler.registerAdapter(new DefaultNameTagAdapter(), 2L);
+    }
+}
 ```
 
-To setup NameTagAdapter, you can easily use
+To set up NameTagAdapter, you can easily use
 
 ```java
 import org.bukkit.entity.Player;
@@ -52,10 +63,10 @@ import xyz.refinedev.api.nametag.setup.NameTagTeam;
 public class ExampleNameTagAdapter extends NameTagAdapter {
 
     /**
-     * Fetch a Player's NameTag update information
+     * Fetch a Player's NameTagTeam
      *
-     * @param toRefresh  {@link Player Target} the player getting their nameTag Refreshed
-     * @param refreshFor {@link Player Viewer} the player that will be receiving the update
+     * @param toRefresh  {@link Player} The player getting their nameTag Refreshed
+     * @param refreshFor {@link Player} The player that will be receiving the update
      * @return           {@link NameTagTeam} The NameTag Entry used for updates
      */
     public NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor) {
