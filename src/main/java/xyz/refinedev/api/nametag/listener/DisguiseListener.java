@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
 import xyz.refinedev.api.nametag.util.ColorUtil;
+import xyz.refinedev.api.nametag.util.TagColor;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.EnumSet;
@@ -61,7 +62,7 @@ public class DisguiseListener extends SimplePacketListenerAbstract {
                 if (player == null) return;
 
                 String prefix = nameTagHandler.getAdapter().fetchNameTag(player, (Player) event.getPlayer()).getPrefix();
-                ChatColor color = ColorUtil.getLastColors(prefix);
+                TagColor color = ColorUtil.getLastColors(prefix);
 
                 System.out.println("Setting colors for viewer " + ((Player) event.getPlayer()).getName() + " as target " + player.getName() + " to " + color.toString().replace("§", "&"));
 
@@ -77,7 +78,7 @@ public class DisguiseListener extends SimplePacketListenerAbstract {
                 if (player == null) return;
 
                 String prefix = nameTagHandler.getAdapter().fetchNameTag(player, (Player) event.getPlayer()).getPrefix();
-                ChatColor color = ColorUtil.getLastColors(prefix);
+                TagColor color = ColorUtil.getLastColors(prefix);
 
                 System.out.println("Setting colors for viewer " + ((Player) event.getPlayer()).getName() + " as target " + player.getName() + " to " + color.toString().replace("§", "&"));
 
