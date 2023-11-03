@@ -26,7 +26,7 @@ public class ColorUtil {
      * @return      {@link NamedTextColor} Last Color or WHITE if none is present.
      */
     public NamedTextColor getLastColor(String input) {
-        TagColor color = getLastColors(input);
+        net.md_5.bungee.api.ChatColor color = getLastColors(input);
         NamedTextColor textColor = NamedTextColor.WHITE;
 
         if (color == null) return textColor;
@@ -37,39 +37,39 @@ public class ColorUtil {
     }
 
     /**
-     * Get last colors from a string in form of {@link TagColor}
+     * Get last colors from a string in form of {@link net.md_5.bungee.api.ChatColor}
      *
      * @param input {@link String} The string from which we extract color
-     * @return      {@link TagColor}
+     * @return      {@link net.md_5.bungee.api.ChatColor}
      */
-    public TagColor getLastColors(String input) {
+    public net.md_5.bungee.api.ChatColor getLastColors(String input) {
         String prefixColor = ChatColor.getLastColors(color(input));
 
         if (prefixColor.isEmpty()) return null;
 
-        TagColor color;
+        net.md_5.bungee.api.ChatColor color;
 
         // Hex Color Support
         if (VersionUtil.canHex()) {
             try {
                 // Convert bukkit's &x based hex color to something bungee color can read (#FFFFFF)
                 String hexColor = prefixColor.replace("§", "").replace("x", "#");
-                color = TagColor.of(hexColor); // Parse into a Bungee Color
+                color = net.md_5.bungee.api.ChatColor.of(hexColor); // Parse into a Bungee Color
             } catch (Exception e) {
                 // If the color is not a hex color, then it's a normal color code
-                val bukkitColor = TagColor.getByChar(prefixColor.substring(prefixColor.length() - 1));
+                val bukkitColor = ChatColor.getByChar(prefixColor.substring(prefixColor.length() - 1));
                 if (bukkitColor == null) {
                     return null;
                 }
-                color = bukkitColor;
+                color = bukkitColor.asBungee();
             }
         } else {
             // Obviously in older versions, hex color does not exist, so we just parse it normally
-            val bukkitColor = TagColor.getByChar(prefixColor.substring(prefixColor.length() - 1));
+            val bukkitColor = ChatColor.getByChar(prefixColor.substring(prefixColor.length() - 1));
             if (bukkitColor == null) {
                 return null;
             }
-            color = bukkitColor;
+            color = bukkitColor.asBungee();
         }
         return color;
     }
@@ -83,7 +83,7 @@ public class ColorUtil {
     public String color(String text) {
         if (text == null) return "";
 
-        text = TagColor.translateAlternateColorCodes('&', text);
+        text = ChatColor.translateAlternateColorCodes('&', text);
 
         // Credits: Creaxx
         if (VersionUtil.canHex()) {
@@ -91,7 +91,7 @@ public class ColorUtil {
             while (matcher.find()) {
                 try {
                     String color = matcher.group();
-                    val bungeeColor = TagColor.of(color.replace("&", ""));
+                    val bungeeColor = net.md_5.bungee.api.ChatColor.of(color.replace("&", ""));
                     text = text.replace(color, bungeeColor.toString());
                 } catch (Exception ignored) {
                     // Errors about unknown group, can be safely ignored!
