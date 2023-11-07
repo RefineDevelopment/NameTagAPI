@@ -25,11 +25,12 @@ import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;
 import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.api.nametag.listener.DisguiseListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
+import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
-import xyz.refinedev.api.nametag.thread.NameTagThread;
 import xyz.refinedev.api.nametag.setup.NameTagUpdate;
-import xyz.refinedev.api.nametag.util.PacketUtil;
+import xyz.refinedev.api.nametag.thread.NameTagThread;
 import xyz.refinedev.api.nametag.util.ColorUtil;
+import xyz.refinedev.api.nametag.util.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.*;
@@ -136,7 +137,11 @@ public class NameTagHandler {
      */
     public void initiatePlayer(Player player) {
         for ( NameTagTeam teamInfo : this.registeredTeams ) {
-            PacketUtil.sendPacket(player, teamInfo.getCreatePacket());
+            if (VersionUtil.MINOR_VERSION > 16) {
+                PacketUtil.broadcast(teamInfo.getPECreatePacket());
+            } else {
+                PacketUtil.broadcast(teamInfo.getNormalCreatePacket());
+            }
         }
     }
 
@@ -219,8 +224,13 @@ public class NameTagHandler {
         }
 
         //TODO: Sort Priority system, by sending remove packets!!
-        WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
-        PacketUtil.sendPacket(refreshFor, packet);
+        if (VersionUtil.MINOR_VERSION > 16) {
+            WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
+            PacketUtil.sendPacket(refreshFor, packet);
+        } else {
+            ScoreboardPacket packet = new ScoreboardPacket(provided.getName(), Collections.singletonList(toRefresh.getName()));
+            PacketUtil.sendPacket(refreshFor, packet);
+        }
 
         // In 1.16, the issue arises that hex color does not apply to the name of the player.
         // This is due to the ScoreboardTeam color being applied to the name, which is a plain enum with normal colors.
@@ -280,8 +290,11 @@ public class NameTagHandler {
         NameTagTeam newTeam = new NameTagTeam("boltNT" + TEAM_INDEX, prefix, suffix, collisionEnabled);
         this.registeredTeams.add(newTeam);
 
-        PacketUtil.broadcast(newTeam.getCreatePacket());
-
+        if (VersionUtil.MINOR_VERSION > 16) {
+            PacketUtil.broadcast(newTeam.getPECreatePacket());
+        } else {
+            PacketUtil.broadcast(newTeam.getNormalCreatePacket());
+        }
         return newTeam;
     }
 }

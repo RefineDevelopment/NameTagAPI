@@ -3,7 +3,6 @@ package xyz.refinedev.api.nametag;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
-
 import org.bukkit.plugin.java.JavaPlugin;
 
 import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;

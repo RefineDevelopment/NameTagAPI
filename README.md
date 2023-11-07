@@ -49,6 +49,7 @@ public class ExamplePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         this.nameTagHandler = new NameTagHandler(this);
+        this.nameTagHandler.init();
         this.nameTagHandler.registerAdapter(new DefaultNameTagAdapter(), 2L);
     }
 }

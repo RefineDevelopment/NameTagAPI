@@ -23,7 +23,7 @@ public class DefaultNameTagAdapter extends NameTagAdapter {
      * @return           {@link NameTagTeam} The NameTag Entry used for updates
      */
     public NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor) {
-        return (createNameTag("&c[Refine] &f", "&9 [Gay]"));
+        return (createNameTag("&c", "&9 [Gay]"));
     }
 
 }
