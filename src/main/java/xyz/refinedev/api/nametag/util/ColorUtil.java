@@ -127,6 +127,10 @@ public class ColorUtil {
         return AdventureSerializer.fromLegacyFormat(color(string));
     }
 
+    public String getRaw(String string) {
+        return string.replace("§", "&");
+    }
+
     public ChatColor getClosestChatColor(Color color) {
         ChatColor closest = null;
         int mark = 0;

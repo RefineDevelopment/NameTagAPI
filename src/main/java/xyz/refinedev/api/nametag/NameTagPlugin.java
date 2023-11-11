@@ -38,6 +38,7 @@ public class NameTagPlugin extends JavaPlugin {
         this.nameTagHandler = new NameTagHandler(this);
         this.nameTagHandler.init(this.packetEventsAPI);
         this.nameTagHandler.registerAdapter(new DefaultNameTagAdapter(), 2L);
+        this.nameTagHandler.setDebugMode(true);
     }
 
     @Override

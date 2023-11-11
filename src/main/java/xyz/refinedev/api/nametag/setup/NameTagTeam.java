@@ -5,8 +5,10 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTe
 import lombok.Getter;
 import lombok.Setter;
 
+import org.bukkit.entity.Player;
 import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
 import xyz.refinedev.api.nametag.util.ColorUtil;
+import xyz.refinedev.api.nametag.util.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 @Getter @Setter
@@ -44,5 +46,18 @@ public class NameTagTeam {
 
     public ScoreboardPacket getNormalCreatePacket() {
         return (ScoreboardPacket) createPacket;
+    }
+
+    public void destroyFor(Player player) {
+        WrapperPlayServerTeams packet = new WrapperPlayServerTeams(name, WrapperPlayServerTeams.TeamMode.REMOVE, new WrapperPlayServerTeams.ScoreBoardTeamInfo(
+                ColorUtil.translate(name),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+        ));
+        PacketUtil.sendPacket(player, packet);
     }
 }

@@ -138,9 +138,9 @@ public class NameTagHandler {
     public void initiatePlayer(Player player) {
         for ( NameTagTeam teamInfo : this.registeredTeams ) {
             if (VersionUtil.MINOR_VERSION > 16) {
-                PacketUtil.broadcast(teamInfo.getPECreatePacket());
+                PacketUtil.sendPacket(player, teamInfo.getPECreatePacket());
             } else {
-                PacketUtil.broadcast(teamInfo.getNormalCreatePacket());
+                PacketUtil.sendPacket(player, teamInfo.getNormalCreatePacket());
             }
         }
     }
@@ -151,6 +151,10 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void unloadPlayer(Player player) {
+//        Map<UUID, NameTagTeam> teamInfoMap = this.teamMap.get(player.getUniqueId());
+//        for ( NameTagTeam team : teamInfoMap.values() ) {
+//            team.destroyFor(player);
+//        }
         this.teamMap.remove(player.getUniqueId());
     }
 
@@ -217,12 +221,6 @@ public class NameTagHandler {
         NameTagTeam provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
         if (provided == null) return;
 
-        Map<UUID, NameTagTeam> teamInfoMap = new HashMap<>();
-
-        if (this.teamMap.containsKey(refreshFor.getUniqueId())) {
-            teamInfoMap = this.teamMap.get(refreshFor.getUniqueId());
-        }
-
         //TODO: Sort Priority system, by sending remove packets!!
         if (VersionUtil.MINOR_VERSION > 16) {
             WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
@@ -266,6 +264,12 @@ public class NameTagHandler {
             PacketUtil.sendPacket(refreshFor, display);
         }
 
+        // Update and store the new team for this target according to the viewer
+        Map<UUID, NameTagTeam> teamInfoMap = new HashMap<>();
+        if (this.teamMap.containsKey(refreshFor.getUniqueId())) {
+            teamInfoMap = this.teamMap.get(refreshFor.getUniqueId());
+        }
+
         teamInfoMap.put(toRefresh.getUniqueId(), provided);
         this.teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
     }
@@ -284,10 +288,12 @@ public class NameTagHandler {
                 return (teamInfo);
             }
         }
-
         TEAM_INDEX++;
 
         NameTagTeam newTeam = new NameTagTeam("boltNT" + TEAM_INDEX, prefix, suffix, collisionEnabled);
+        if (debugMode) {
+            log.info("[NameTagAPI-Debug] Creating Team with Name: {} with Prefix {} and Suffix {}", newTeam.getName(), ColorUtil.getRaw(newTeam.getPrefix()), ColorUtil.getRaw(newTeam.getSuffix()));
+        }
         this.registeredTeams.add(newTeam);
 
         if (VersionUtil.MINOR_VERSION > 16) {

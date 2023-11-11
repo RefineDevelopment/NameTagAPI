@@ -53,6 +53,6 @@ public final class NameTagListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        this.handler.unloadPlayer(player);
+        Bukkit.getScheduler().runTaskAsynchronously(this.handler.getPlugin(), () -> this.handler.unloadPlayer(player));
     }
 }
