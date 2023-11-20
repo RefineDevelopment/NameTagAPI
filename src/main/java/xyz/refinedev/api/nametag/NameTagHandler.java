@@ -151,10 +151,9 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void unloadPlayer(Player player) {
-//        Map<UUID, NameTagTeam> teamInfoMap = this.teamMap.get(player.getUniqueId());
-//        for ( NameTagTeam team : teamInfoMap.values() ) {
-//            team.destroyFor(player);
-//        }
+        for ( NameTagTeam team : registeredTeams ) {
+            team.destroyFor(player);
+        }
         this.teamMap.remove(player.getUniqueId());
     }
 
