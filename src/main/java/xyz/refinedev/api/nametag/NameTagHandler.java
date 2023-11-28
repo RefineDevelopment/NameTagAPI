@@ -9,18 +9,14 @@ import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfo;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfoUpdate;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;
 import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.api.nametag.listener.DisguiseListener;
@@ -42,23 +38,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * Redistribution of this Project is not allowed.
  *
  * @author Drizzy
- * @since 9/12/2023
  * @version NameTagAPI
+ * @since 9/12/2023
  */
-@Getter @Setter @Log4j2
+@Getter
+@Setter
+@Log4j2
 public class NameTagHandler {
-
-    private static int TEAM_INDEX = 1;
 
     /**
      * Static instance of this handler
      */
-    @Getter private static NameTagHandler instance;
+    @Getter
+    private static NameTagHandler instance;
 
     /**
      * This map stores all the current NameTag info of all targets per viewer.
      * <p>
-     *           <center>Viewer -> Target -> {@link NameTagTeam}</center>
+     * <center>Viewer -> Target -> {@link NameTagTeam}</center>
      * </p>
      */
     private final Map<UUID, Map<UUID, NameTagTeam>> teamMap = new ConcurrentHashMap<>();
@@ -136,7 +133,7 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void initiatePlayer(Player player) {
-        for ( NameTagTeam teamInfo : this.registeredTeams ) {
+        for (NameTagTeam teamInfo : this.registeredTeams) {
             if (VersionUtil.MINOR_VERSION > 16) {
                 PacketUtil.sendPacket(player, teamInfo.getPECreatePacket());
             } else {
@@ -278,19 +275,19 @@ public class NameTagHandler {
      * Get a {@link NameTagTeam} associated with the given prefix and suffix.
      * If we don't have one for these prefixes and suffixes, then we make one and send it to everyone.
      *
+     * @param name   {@link String} Raw Name
      * @param prefix {@link String} Raw Prefix
      * @param suffix {@link String} Raw Suffix
-     * @return       {@link NameTagTeam} Associated Team
+     * @return {@link NameTagTeam} Associated Team
      */
-    public NameTagTeam getOrCreate(String prefix, String suffix) {
-        for ( NameTagTeam teamInfo : registeredTeams) {
+    public NameTagTeam getOrCreate(String name, String prefix, String suffix) {
+        for (NameTagTeam teamInfo : registeredTeams) {
             if (teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
                 return (teamInfo);
             }
         }
-        TEAM_INDEX++;
 
-        NameTagInfo newTeam = new NameTagInfo(name, prefix, suffix, collisionEnabled);
+        NameTagTeam newTeam = new NameTagTeam(name, prefix, suffix, collisionEnabled);
         if (debugMode) {
             log.info("[NameTagAPI-Debug] Creating Team with Name: {} with Prefix {} and Suffix {}", newTeam.getName(), ColorUtil.getRaw(newTeam.getPrefix()), ColorUtil.getRaw(newTeam.getSuffix()));
         }

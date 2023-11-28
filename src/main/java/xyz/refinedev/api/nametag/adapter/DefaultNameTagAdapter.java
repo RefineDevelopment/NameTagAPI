@@ -1,9 +1,9 @@
 package xyz.refinedev.api.nametag.adapter;
 
+import org.bukkit.ChatColor;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
 
 import org.bukkit.entity.Player;
-import xyz.refinedev.api.nametag.setup.NameTagInfo;
 
 /**
  * This Project is property of Refine Development.

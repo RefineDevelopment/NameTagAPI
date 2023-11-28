@@ -1,10 +1,10 @@
 package xyz.refinedev.api.nametag.adapter;
 
-import xyz.refinedev.api.nametag.setup.NameTagTeam;
-import xyz.refinedev.api.nametag.NameTagHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
+import xyz.refinedev.api.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.setup.NameTagTeam;
 
 /**
  * This Project is property of Refine Development.
@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
  * Redistribution of this Project is not allowed.
  *
  * @author Drizzy
- * @since 9/12/2023
  * @version NameTagAPI
+ * @since 9/12/2023
  */
 @Getter
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public abstract class NameTagAdapter {
      *
      * @param toRefresh  {@link Player Target} the player getting their nameTag Refreshed
      * @param refreshFor {@link Player Viewer} the player that will be receiving the update
-     * @return           {@link NameTagTeam} The NameTag Entry used for updates
+     * @return {@link NameTagTeam} The NameTag Entry used for updates
      */
     public abstract NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor);
 
@@ -35,9 +35,9 @@ public abstract class NameTagAdapter {
      * @param name   {@link String name}
      * @param prefix {@link String prefix}
      * @param suffix {@link String suffix}
-     * @return       {@link NameTagTeam Name Tag info}
+     * @return {@link NameTagTeam Name Tag info}
      */
-    public NameTagInfo createNameTag(String name, String prefix, String suffix) {
+    public NameTagTeam createNameTag(String name, String prefix, String suffix) {
         return NameTagHandler.getInstance().getOrCreate(name, prefix, suffix);
     }
 }
