@@ -1,6 +1,7 @@
 package xyz.refinedev.api.nametag.adapter;
 
-import org.bukkit.ChatColor;
+import xyz.refinedev.api.nametag.setup.NameTagTeam;
+
 import org.bukkit.entity.Player;
 import xyz.refinedev.api.nametag.setup.NameTagInfo;
 
@@ -20,9 +21,9 @@ public class DefaultNameTagAdapter extends NameTagAdapter {
      *
      * @param toRefresh  {@link Player Target} the player getting their nameTag Refreshed
      * @param refreshFor {@link Player Viewer} the player that will be receiving the update
-     * @return {@link NameTagInfo} The NameTag Entry used for updates
+     * @return           {@link NameTagTeam} The NameTag Entry used for updates
      */
-    public NameTagInfo fetchNameTag(Player toRefresh, Player refreshFor) {
+    public NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor) {
         return (createNameTag("refine", ChatColor.RED + "[Refine] " + ChatColor.WHITE, ""));
     }
 

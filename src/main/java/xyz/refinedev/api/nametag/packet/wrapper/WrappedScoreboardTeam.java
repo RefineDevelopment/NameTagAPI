@@ -22,7 +22,6 @@ public class WrappedScoreboardTeam extends AbstractWrapper {
         .getFieldAccessor(ExactReflection.fromClass(MinecraftReflection.getMinecraftClass("network.protocol.game.PacketPlayOutScoreboardTeam$b"), true).findField("b"));
     private static final FieldAccessor SUFFIX = Accessors
             .getFieldAccessor(ExactReflection.fromClass(MinecraftReflection.getMinecraftClass("network.protocol.game.PacketPlayOutScoreboardTeam$b"), true).findField("c"));
-
     private static final FieldAccessor NAME_TAG_VISIBILITY = Accessors
             .getFieldAccessor(ExactReflection.fromClass(MinecraftReflection.getMinecraftClass("network.protocol.game.PacketPlayOutScoreboardTeam$b"), true).findField("d"));
     private static final FieldAccessor COLLISION_RULE = Accessors
@@ -33,7 +32,7 @@ public class WrappedScoreboardTeam extends AbstractWrapper {
             .getFieldAccessor(ExactReflection.fromClass(MinecraftReflection.getMinecraftClass("network.protocol.game.PacketPlayOutScoreboardTeam$b"), true).findField("g"));
 
     private static final Class<?> ENUM_CHAT_FORMAT_CLASS = MinecraftReflection.getMinecraftClass("EnumChatFormat");
-    private static final IndexedEnumConverter<ChatColor> CHATCOLOR_CONVERTER = new EnumWrappers.IndexedEnumConverter<>(ChatColor.class, ENUM_CHAT_FORMAT_CLASS);
+    private static final IndexedEnumConverter<ChatColor> CHATCOLOR_CONVERTER = new IndexedEnumConverter<>(ChatColor.class, ENUM_CHAT_FORMAT_CLASS);
 
     private WrappedScoreboardTeam(Object handle) {
         super(MinecraftReflection.getMinecraftClass("network.protocol.game.PacketPlayOutScoreboardTeam$b"));

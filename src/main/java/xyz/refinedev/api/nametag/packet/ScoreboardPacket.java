@@ -1,13 +1,13 @@
 package xyz.refinedev.api.nametag.packet;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
-import org.bukkit.entity.Player;
+import lombok.Getter;
 
+import xyz.refinedev.api.nametag.NameTagHandler;
 import xyz.refinedev.api.nametag.packet.wrapper.WrappedScoreboardTeam;
 import xyz.refinedev.api.nametag.util.ColorUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
@@ -24,8 +24,11 @@ import java.util.Optional;
  * @since 9/12/2023
  * @version NameTagAPI
  */
+
+@Getter
 public class ScoreboardPacket {
 
+    private final NameTagHandler nameTagHandler = NameTagHandler.getInstance();
 
     // 0 - create
     // 1 - remove
@@ -35,55 +38,45 @@ public class ScoreboardPacket {
 
     private final PacketContainer container;
 
-    public ScoreboardPacket(String name, String prefix, String suffix, int paramInt) {
+    public ScoreboardPacket(String name, String prefix, String suffix) {
         this.container = new PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM);
-        this.setCreateFields(name, prefix, suffix, paramInt);
+        this.setCreateFields(name, prefix, suffix);
     }
 
-    public ScoreboardPacket(String name, Collection<String> players, int paramInt) {
+    public ScoreboardPacket(String name, Collection<String> players) {
         this.container = new PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM);
-        this.setAddFields(name, players, paramInt);
+        this.setAddFields(name, players);
     }
 
-    private void setCreateFields(String name, String prefix, String suffix, int paramInt) {
+    private void setCreateFields(String name, String prefix, String suffix) {
+        String collisionRule = nameTagHandler.isCollisionEnabled() ? "always" : "never";
+
         container.getModifier().writeDefaults();
         switch (VersionUtil.MINOR_VERSION) {
             case 8: {
-                if (prefix.length() > 16) {
-                    prefix = prefix.substring(0, 16);
-                }
-                if (suffix.length() > 16) {
-                    suffix = suffix.substring(0, 16);
-                }
                 container.getStrings()
                         .writeSafely(0, name) // Team Name
                         .writeSafely(1, name) // Display name
-                        .writeSafely(2, prefix) // Prefix
-                        .writeSafely(3, suffix) // Suffix
+                        .writeSafely(2, ColorUtil.color(prefix)) // Prefix
+                        .writeSafely(3, ColorUtil.color(suffix)) // Suffix
                         .writeSafely(4, "always");
 
                 container.getIntegers()
-                        .writeSafely(1, paramInt) // Team Mode
+                        .writeSafely(1, 0) // Team Mode
                         .writeSafely(2, 1); // Packet Option Data
                 break;
             }
             case 12: {
-                if (prefix.length() > 16) {
-                    prefix = prefix.substring(0, 16);
-                }
-                if (suffix.length() > 16) {
-                    suffix = suffix.substring(0, 16);
-                }
                 container.getStrings()
                         .writeSafely(0, name) // Team Name
                         .writeSafely(1, name) // Display name
-                        .writeSafely(2, prefix) // Prefix
-                        .writeSafely(3, suffix) // Suffix
+                        .writeSafely(2, ColorUtil.color(prefix)) // Prefix
+                        .writeSafely(3, ColorUtil.color(prefix)) // Suffix
                         .writeSafely(4, "always") // NameTag Visibility
-                        .writeSafely(5, "always"); // Collision Rule
+                        .writeSafely(5, collisionRule); // Collision Rule
                 container.getIntegers()
                         .writeSafely(0, -1) // Color
-                        .writeSafely(1, paramInt) // Team Mode
+                        .writeSafely(1, 0) // Team Mode
                         .writeSafely(2, 1); // Packet Option Data
                 break;
             }
@@ -91,54 +84,34 @@ public class ScoreboardPacket {
                 container.getStrings()
                         .writeSafely(0, name) // Team Name
                         .writeSafely(1, "always") // NameTag Visibility
-                        .writeSafely(2, "always"); // Collision Rule
+                        .writeSafely(2, collisionRule); // Collision Rule
                 container.getChatComponents()
                         .writeSafely(0, WrappedChatComponent.fromLegacyText(name))
-                        .writeSafely(1, WrappedChatComponent.fromLegacyText(prefix))
-                        .writeSafely(2, WrappedChatComponent.fromLegacyText(suffix));
+                        .writeSafely(1, WrappedChatComponent.fromLegacyText(ColorUtil.color(prefix)))
+                        .writeSafely(2, WrappedChatComponent.fromLegacyText(ColorUtil.color(suffix)));
                 container.getIntegers()
-                        .writeSafely(0, paramInt) // Team Mode
+                        .writeSafely(0, 0) // Team Mode
                         .writeSafely(1, 1); // Packet Option Data
                 break;
             }
             default: {
                 if (!VersionUtil.isModern()) {
-                    throw new IllegalArgumentException("[NameTagAPI] Version not support!");
-                }
-                container.getStrings().writeSafely(0, name); // Team Name
-
-                final StructureModifier<Optional<?>> optionals = container.getModifier().withType(Optional.class);
-                optionals.writeDefaults();
-
-                final StructureModifier<Integer> integers = container.getIntegers();
-                if (integers.size() > 1) {
-                    integers.writeSafely(7, paramInt); // mode
-                } else if (integers.size() > 0) {
-                    integers.writeSafely(0, paramInt); // mode
+                    throw new IllegalArgumentException("[NameTagAPI] Version not supported!");
                 }
 
-                Optional<?> optional = optionals.read(0);
-                if (optional.isPresent()) { // Make sure the structure exists (it always does)
-                    final WrappedScoreboardTeam team = WrappedScoreboardTeam.fromHandle(optional.get());
-                    team.setDisplayName(WrappedChatComponent.fromText(name)); // team display name
-                    team.setPrefix(WrappedChatComponent.fromText(prefix)); // prefix
-                    team.setSuffix(WrappedChatComponent.fromText(suffix)); // suffix
-                    team.setCollisionRule("always");
-                    team.setNameTagVisibility("always");
-                    team.setTeamColor(ColorUtil.convertToColor(prefix));
-                    optionals.write(0, Optional.of(team.getHandle()));
-                }
-                break;
+                throw new IllegalStateException("[NameTagAPI] How did you get here?!");
             }
         }
     }
 
-    private void setAddFields(String name, Collection<String> players, int paramInt) {
+    private void setAddFields(String name, Collection<String> players) {
+        String collisionRule = nameTagHandler.isCollisionEnabled() ? "always" : "never";
+
         container.getModifier().writeDefaults();
         switch (VersionUtil.MINOR_VERSION) {
             case 8: {
                 container.getStrings().writeSafely(0, name); // Team Name
-                container.getIntegers().writeSafely(1, paramInt); // Team Mode
+                container.getIntegers().writeSafely(1, 3); // Team Mode
                 container.getSpecificModifier(Collection.class).writeSafely(0, players);
                 break;
             }
@@ -146,10 +119,10 @@ public class ScoreboardPacket {
                 container.getStrings()
                         .writeSafely(0, name) // Team Name
                         .writeSafely(4, "always") // NameTag Visibility
-                        .writeSafely(5, "always"); // Collision Rule
+                        .writeSafely(5, collisionRule); // Collision Rule
                 container.getIntegers()
                         .writeSafely(0, -1) // Color
-                        .writeSafely(1, paramInt); // Team Mode
+                        .writeSafely(1, 3); // Team Mode
 
                 container.getSpecificModifier(Collection.class).writeSafely(0, players);
                 break;
@@ -158,13 +131,13 @@ public class ScoreboardPacket {
                 container.getStrings()
                         .writeSafely(0, name) // Team Name
                         .writeSafely(1, "always") // NameTag Visibility
-                        .writeSafely(2, "always"); // Collision Rule
+                        .writeSafely(2, collisionRule); // Collision Rule
                 container.getChatComponents()
                         .writeSafely(0, WrappedChatComponent.fromLegacyText(""))
                         .writeSafely(1, WrappedChatComponent.fromLegacyText(""))
                         .writeSafely(2, WrappedChatComponent.fromLegacyText(""));
                 container.getIntegers()
-                        .writeSafely(0, paramInt); // Team mode
+                        .writeSafely(0, 3); // Team mode
                 container.getSpecificModifier(Collection.class).writeSafely(0, players);
                 break;
             }
@@ -172,20 +145,17 @@ public class ScoreboardPacket {
                 if (!VersionUtil.isModern()) {
                     throw new IllegalArgumentException("[NameTagAPI] Version not supported!");
                 }
-                container.getStrings().writeSafely(0, name); // Team Name
-                final StructureModifier<Integer> integers = container.getIntegers();
-                if (integers.size() > 1) {
-                    integers.writeSafely(1, paramInt); // mode
-                } else if (integers.size() > 0) {
-                    integers.writeSafely(0, paramInt); // mode
-                }
-                container.getSpecificModifier(Collection.class).writeSafely(0, players);
-                break;
+//                container.getStrings().writeSafely(0, name); // Team Name
+//                final StructureModifier<Integer> integers = container.getIntegers();
+//                if (integers.size() > 1) {
+//                    integers.writeSafely(1, 3); // mode
+//                } else if (integers.size() > 0) {
+//                    integers.writeSafely(0, 3); // mode
+//                }
+//                container.getSpecificModifier(Collection.class).writeSafely(0, players);
+
+                throw new IllegalStateException("[NameTagAPI] How did you get here?!");
             }
         }
-    }
-
-    public void sendToPlayer(Player bukkitPlayer) {
-        ProtocolLibrary.getProtocolManager().sendServerPacket(bukkitPlayer, this.container);
     }
 }
