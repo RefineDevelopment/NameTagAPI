@@ -113,15 +113,6 @@ public class ScoreboardPacket {
                 if (!VersionUtil.canHex()) {
                     throw new IllegalArgumentException("[NameTagAPI] Version not supported!");
                 }
-//                container.getStrings().writeSafely(0, name); // Team Name
-//                final StructureModifier<Integer> integers = container.getIntegers();
-//                if (integers.size() > 1) {
-//                    integers.writeSafely(1, 3); // mode
-//                } else if (integers.size() > 0) {
-//                    integers.writeSafely(0, 3); // mode
-//                }
-//                container.getSpecificModifier(Collection.class).writeSafely(0, players);
-
                 throw new IllegalStateException("[NameTagAPI] How did you get here?!");
             }
         }
