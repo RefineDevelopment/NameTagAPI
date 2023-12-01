@@ -24,7 +24,7 @@ public class NameTagTeam {
         this.prefix = prefix;
         this.suffix = suffix;
 
-        if (VersionUtil.MINOR_VERSION > 16) {
+        if (VersionUtil.MINOR_VERSION > 12) {
             WrapperPlayServerTeams.ScoreBoardTeamInfo info = new WrapperPlayServerTeams.ScoreBoardTeamInfo(
                     ColorUtil.translate(name),
                     ColorUtil.translate(prefix),

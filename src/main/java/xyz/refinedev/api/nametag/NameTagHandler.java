@@ -137,7 +137,7 @@ public class NameTagHandler {
      */
     public void initiatePlayer(Player player) {
         for ( NameTagTeam teamInfo : this.registeredTeams ) {
-            if (VersionUtil.MINOR_VERSION > 16) {
+            if (VersionUtil.MINOR_VERSION > 12) {
                 PacketUtil.sendPacket(player, teamInfo.getPECreatePacket());
             } else {
                 PacketUtil.sendPacket(player, teamInfo.getNormalCreatePacket());
@@ -221,7 +221,7 @@ public class NameTagHandler {
         if (provided == null) return;
 
         //TODO: Sort Priority system, by sending remove packets!!
-        if (VersionUtil.MINOR_VERSION > 16) {
+        if (VersionUtil.MINOR_VERSION > 12) {
             WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
             PacketUtil.sendPacket(refreshFor, packet);
         } else {
@@ -295,7 +295,7 @@ public class NameTagHandler {
         }
         this.registeredTeams.add(newTeam);
 
-        if (VersionUtil.MINOR_VERSION > 16) {
+        if (VersionUtil.MINOR_VERSION > 12) {
             PacketUtil.broadcast(newTeam.getPECreatePacket());
         } else {
             PacketUtil.broadcast(newTeam.getNormalCreatePacket());

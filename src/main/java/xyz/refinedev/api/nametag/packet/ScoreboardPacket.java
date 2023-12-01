@@ -2,18 +2,14 @@ package xyz.refinedev.api.nametag.packet;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.reflect.StructureModifier;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
 import lombok.Getter;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
-import xyz.refinedev.api.nametag.packet.wrapper.WrappedScoreboardTeam;
 import xyz.refinedev.api.nametag.util.ColorUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This Project is property of Refine Development.
@@ -80,22 +76,8 @@ public class ScoreboardPacket {
                         .writeSafely(2, 1); // Packet Option Data
                 break;
             }
-            case 16: {
-                container.getStrings()
-                        .writeSafely(0, name) // Team Name
-                        .writeSafely(1, "always") // NameTag Visibility
-                        .writeSafely(2, collisionRule); // Collision Rule
-                container.getChatComponents()
-                        .writeSafely(0, WrappedChatComponent.fromLegacyText(name))
-                        .writeSafely(1, WrappedChatComponent.fromLegacyText(ColorUtil.color(prefix)))
-                        .writeSafely(2, WrappedChatComponent.fromLegacyText(ColorUtil.color(suffix)));
-                container.getIntegers()
-                        .writeSafely(0, 0) // Team Mode
-                        .writeSafely(1, 1); // Packet Option Data
-                break;
-            }
             default: {
-                if (!VersionUtil.isModern()) {
+                if (!VersionUtil.canHex()) {
                     throw new IllegalArgumentException("[NameTagAPI] Version not supported!");
                 }
 
@@ -127,22 +109,8 @@ public class ScoreboardPacket {
                 container.getSpecificModifier(Collection.class).writeSafely(0, players);
                 break;
             }
-            case 16: {
-                container.getStrings()
-                        .writeSafely(0, name) // Team Name
-                        .writeSafely(1, "always") // NameTag Visibility
-                        .writeSafely(2, collisionRule); // Collision Rule
-                container.getChatComponents()
-                        .writeSafely(0, WrappedChatComponent.fromLegacyText(""))
-                        .writeSafely(1, WrappedChatComponent.fromLegacyText(""))
-                        .writeSafely(2, WrappedChatComponent.fromLegacyText(""));
-                container.getIntegers()
-                        .writeSafely(0, 3); // Team mode
-                container.getSpecificModifier(Collection.class).writeSafely(0, players);
-                break;
-            }
             default: {
-                if (!VersionUtil.isModern()) {
+                if (!VersionUtil.canHex()) {
                     throw new IllegalArgumentException("[NameTagAPI] Version not supported!");
                 }
 //                container.getStrings().writeSafely(0, name); // Team Name

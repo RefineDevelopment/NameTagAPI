@@ -5,9 +5,11 @@ import com.google.common.collect.ImmutableMap;
 
 import lombok.experimental.UtilityClass;
 import lombok.val;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+
 import org.bukkit.ChatColor;
 
 import java.awt.*;
@@ -106,7 +108,11 @@ public class ColorUtil {
             while (matcher.find()) {
                 try {
                     String color = matcher.group();
-                    String hexColor = color.replace("&", "").replace("x", "#");
+                    String hexColor = color
+                            .replace("§", "")
+                            .replace("&", "")
+                            .replace("x", "#");
+
                     val bungeeColor = net.md_5.bungee.api.ChatColor.of(hexColor);
                     text = text.replace(color, bungeeColor.toString());
                 } catch (Exception ignored) {
@@ -148,7 +154,7 @@ public class ColorUtil {
         return closest;
     }
 
-    private static int getDiff(Color color, Color compare) {
+    private int getDiff(Color color, Color compare) {
         int a = color.getAlpha() - compare.getAlpha(),
                 r = color.getRed() - compare.getRed(),
                 g = color.getGreen() - compare.getGreen(),
