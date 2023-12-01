@@ -3,9 +3,12 @@ package xyz.refinedev.api.nametag;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;
+import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
+import xyz.refinedev.api.nametag.setup.NameTagTeam;
 
 /**
  * This Project is property of Refine Development.
@@ -23,6 +26,8 @@ public class NameTagPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        saveDefaultConfig();
+
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
 
         this.packetEventsAPI = PacketEvents.getAPI();
@@ -37,7 +42,12 @@ public class NameTagPlugin extends JavaPlugin {
 
         this.nameTagHandler = new NameTagHandler(this);
         this.nameTagHandler.init(this.packetEventsAPI);
-        this.nameTagHandler.registerAdapter(new DefaultNameTagAdapter(), 2L);
+        this.nameTagHandler.registerAdapter(new NameTagAdapter() {
+            @Override
+            public NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor) {
+                return createNameTag(getConfig().getString("NAME-TAGS.PREFIX"), getConfig().getString("NAME-TAGS.SUFFIX"));
+            }
+        }, 2L);
         this.nameTagHandler.setDebugMode(true);
     }
 
