@@ -48,7 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter @Setter @Log4j2
 public class NameTagHandler {
 
-    private static int TEAM_INDEX = 1;
+    private static int TEAM_INDEX = 0;
 
     /**
      * Static instance of this handler
