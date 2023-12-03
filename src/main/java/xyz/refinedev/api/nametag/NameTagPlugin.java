@@ -33,12 +33,12 @@ public class NameTagPlugin extends JavaPlugin {
         this.packetEventsAPI = PacketEvents.getAPI();
         this.packetEventsAPI.getSettings().bStats(false).checkForUpdates(false);
 
-        this.packetEventsAPI.load();
+        if (!this.packetEventsAPI.isLoaded()) this.packetEventsAPI.load();
     }
 
     @Override
     public void onEnable() {
-        this.packetEventsAPI.init();
+        if (!this.packetEventsAPI.isInitialized()) this.packetEventsAPI.init();
 
         this.nameTagHandler = new NameTagHandler(this);
         this.nameTagHandler.init(this.packetEventsAPI);

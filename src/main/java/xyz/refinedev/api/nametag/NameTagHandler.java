@@ -24,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;
 import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.api.nametag.listener.DisguiseListener;
+import xyz.refinedev.api.nametag.listener.GlitchFixListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
 import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
@@ -98,6 +99,7 @@ public class NameTagHandler {
 
         this.packetEvents.getEventManager().registerListener(new DisguiseListener());
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
+        Bukkit.getPluginManager().registerEvents(new GlitchFixListener(this), this.plugin);
     }
 
     /**
@@ -219,6 +221,10 @@ public class NameTagHandler {
     public void reloadPlayerInternal(Player toRefresh, Player refreshFor) {
         NameTagTeam provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
         if (provided == null) return;
+
+        if (debugMode) {
+            refreshFor.sendMessage("Updating nametag for " + toRefresh.getName());
+        }
 
         //TODO: Sort Priority system, by sending remove packets!!
         if (VersionUtil.MINOR_VERSION > 12) {
