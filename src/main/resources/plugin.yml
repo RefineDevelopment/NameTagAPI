@@ -6,3 +6,4 @@ softdepend:
   - ViaVersion
   - ProtocolLib
   - ViaRewind
+  - TablistAPI

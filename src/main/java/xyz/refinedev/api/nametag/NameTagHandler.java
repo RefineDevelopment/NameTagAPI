@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;
 import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.api.nametag.listener.DisguiseListener;
+import xyz.refinedev.api.nametag.listener.GlitchFixListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
 import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
@@ -95,6 +96,7 @@ public class NameTagHandler {
 
         this.packetEvents.getEventManager().registerListener(new DisguiseListener());
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
+        Bukkit.getPluginManager().registerEvents(new GlitchFixListener(this), this.plugin);
     }
 
     /**
@@ -134,7 +136,7 @@ public class NameTagHandler {
      */
     public void initiatePlayer(Player player) {
         for (NameTagTeam teamInfo : this.registeredTeams) {
-            if (VersionUtil.MINOR_VERSION > 16) {
+            if (VersionUtil.MINOR_VERSION > 12) {
                 PacketUtil.sendPacket(player, teamInfo.getPECreatePacket());
             } else {
                 PacketUtil.sendPacket(player, teamInfo.getNormalCreatePacket());
@@ -148,10 +150,9 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void unloadPlayer(Player player) {
-//        Map<UUID, NameTagTeam> teamInfoMap = this.teamMap.get(player.getUniqueId());
-//        for ( NameTagTeam team : teamInfoMap.values() ) {
-//            team.destroyFor(player);
-//        }
+        for ( NameTagTeam team : registeredTeams ) {
+            team.destroyFor(player);
+        }
         this.teamMap.remove(player.getUniqueId());
     }
 
@@ -218,8 +219,12 @@ public class NameTagHandler {
         NameTagTeam provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
         if (provided == null) return;
 
+        if (debugMode) {
+            refreshFor.sendMessage("Updating nametag for " + toRefresh.getName());
+        }
+
         //TODO: Sort Priority system, by sending remove packets!!
-        if (VersionUtil.MINOR_VERSION > 16) {
+        if (VersionUtil.MINOR_VERSION > 12) {
             WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
             PacketUtil.sendPacket(refreshFor, packet);
         } else {
@@ -293,7 +298,7 @@ public class NameTagHandler {
         }
         this.registeredTeams.add(newTeam);
 
-        if (VersionUtil.MINOR_VERSION > 16) {
+        if (VersionUtil.MINOR_VERSION > 12) {
             PacketUtil.broadcast(newTeam.getPECreatePacket());
         } else {
             PacketUtil.broadcast(newTeam.getNormalCreatePacket());

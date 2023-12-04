@@ -8,10 +8,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.java.JavaPlugin;
 import xyz.refinedev.api.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.NameTagPlugin;
 
 /**
  * This Project is property of Refine Development.
@@ -30,8 +35,10 @@ public final class NameTagListener implements Listener {
     private final NameTagHandler handler;
 
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerJoin(PlayerLoginEvent event) {
+        if (!event.getResult().equals(PlayerLoginEvent.Result.ALLOWED)) return;
+
         Player player = event.getPlayer();
 
         // PacketEvents or maybe even bukkit is making first join
@@ -52,7 +59,6 @@ public final class NameTagListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-
-        Bukkit.getScheduler().runTaskAsynchronously(this.handler.getPlugin(), () -> this.handler.unloadPlayer(player));
+        this.handler.unloadPlayer(player);
     }
 }
