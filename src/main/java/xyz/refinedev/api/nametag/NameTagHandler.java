@@ -150,7 +150,7 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void unloadPlayer(Player player) {
-        for ( NameTagTeam team : registeredTeams ) {
+        for (NameTagTeam team : registeredTeams) {
             team.destroyFor(player);
         }
         this.teamMap.remove(player.getUniqueId());
@@ -288,13 +288,13 @@ public class NameTagHandler {
             log.info("[NameTagAPI-Debug] Trying to fetch a team with prefix {} and suffix {}", ColorUtil.getRaw(prefix), ColorUtil.getRaw(suffix));
         }
 
-        if (cachedTeam != null && cachedTeam.getPrefix().equals(prefix) && cachedTeam.getSuffix().equals(suffix)) {
+        if (cachedTeam != null && cachedTeam.getName().equals(name) && cachedTeam.getPrefix().equals(prefix) && cachedTeam.getSuffix().equals(suffix)) {
             return (cachedTeam);
         }
 
-        for ( NameTagTeam teamInfo : registeredTeams) {
-            if (teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
-                return (teamInfo);
+        for (NameTagTeam teamInfo : registeredTeams) {
+            if (teamInfo.getName().equals(name) && teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
+                return teamInfo;
             }
         }
 
