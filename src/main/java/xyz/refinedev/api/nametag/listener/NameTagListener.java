@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
@@ -31,9 +32,7 @@ public final class NameTagListener implements Listener {
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerJoin(PlayerLoginEvent event) {
-        if (!event.getResult().equals(PlayerLoginEvent.Result.ALLOWED)) return;
-
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         // PacketEvents or maybe even bukkit is making first join
@@ -48,7 +47,7 @@ public final class NameTagListener implements Listener {
             }
             this.handler.reloadPlayer(player);
             this.handler.reloadOthersFor(player);
-        }, 2L);
+        }, 20L);
     }
 
     @EventHandler

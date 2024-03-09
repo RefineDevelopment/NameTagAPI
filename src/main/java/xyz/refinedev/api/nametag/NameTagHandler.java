@@ -219,10 +219,6 @@ public class NameTagHandler {
         NameTagTeam provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
         if (provided == null) return;
 
-        if (debugMode) {
-            refreshFor.sendMessage("Updating nametag for " + toRefresh.getName());
-        }
-
         //TODO: Sort Priority system, by sending remove packets!!
         if (VersionUtil.MINOR_VERSION > 12) {
             WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
@@ -276,6 +272,8 @@ public class NameTagHandler {
         this.teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
     }
 
+    private NameTagTeam cachedTeam;
+
     /**
      * Get a {@link NameTagTeam} associated with the given prefix and suffix.
      * If we don't have one for these prefixes and suffixes, then we make one and send it to everyone.
@@ -286,13 +284,22 @@ public class NameTagHandler {
      * @return {@link NameTagTeam} Associated Team
      */
     public NameTagTeam getOrCreate(String name, String prefix, String suffix) {
-        for (NameTagTeam teamInfo : registeredTeams) {
+        if (debugMode) {
+            log.info("[NameTagAPI-Debug] Trying to fetch a team with prefix {} and suffix {}", ColorUtil.getRaw(prefix), ColorUtil.getRaw(suffix));
+        }
+
+        if (cachedTeam != null && cachedTeam.getPrefix().equals(prefix) && cachedTeam.getSuffix().equals(suffix)) {
+            return (cachedTeam);
+        }
+
+        for ( NameTagTeam teamInfo : registeredTeams) {
             if (teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
                 return (teamInfo);
             }
         }
 
         NameTagTeam newTeam = new NameTagTeam(name, prefix, suffix, collisionEnabled);
+        cachedTeam = newTeam;
         if (debugMode) {
             log.info("[NameTagAPI-Debug] Creating Team with Name: {} with Prefix {} and Suffix {}", newTeam.getName(), ColorUtil.getRaw(newTeam.getPrefix()), ColorUtil.getRaw(newTeam.getSuffix()));
         }

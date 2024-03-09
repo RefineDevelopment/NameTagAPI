@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.util.adventure.AdventureSerializer;
 import com.google.common.collect.ImmutableMap;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 import net.kyori.adventure.text.Component;
@@ -11,13 +12,14 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 
 import org.bukkit.ChatColor;
+import xyz.refinedev.api.nametag.NameTagHandler;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@UtilityClass
+@UtilityClass @Log4j2
 public class ColorUtil {
 
     private static final Map<ChatColor, Color> COLOR_MAPPINGS = ImmutableMap.<ChatColor, Color>builder()
@@ -47,6 +49,16 @@ public class ColorUtil {
         if (color == null) return textColor;
 
         net.md_5.bungee.api.ChatColor md5Color = color.asBungee();
+        if (NameTagHandler.getInstance().isDebugMode()) {
+            log.info("Last color is {} " + getRaw(md5Color.toString()));
+        }
+
+        if (md5Color.getColor() == null) {
+            if (NameTagHandler.getInstance().isDebugMode()) {
+                log.info("MD5 color was null, {} " + getRaw(md5Color.toString()));
+            }
+            return textColor;
+        }
 
         // I couldn't really find a direct conversion, but in case of bungee's color, it provides java color which be used to convert to adventure's color
         TextColor parsed = TextColor.color(md5Color.getColor().getRed(), md5Color.getColor().getGreen(), md5Color.getColor().getBlue());
@@ -101,15 +113,12 @@ public class ColorUtil {
     public String color(String text) {
         if (text == null) return "";
 
-        text = ChatColor.translateAlternateColorCodes('&', text);
-
         if (VersionUtil.canHex()) {
             Matcher matcher = hexPattern.matcher(text);
             while (matcher.find()) {
                 try {
                     String color = matcher.group();
                     String hexColor = color
-                            .replace("§", "")
                             .replace("&", "")
                             .replace("x", "#");
 
@@ -120,6 +129,9 @@ public class ColorUtil {
                 }
             }
         }
+
+        text = ChatColor.translateAlternateColorCodes('&', text);
+
         return text;
     }
 

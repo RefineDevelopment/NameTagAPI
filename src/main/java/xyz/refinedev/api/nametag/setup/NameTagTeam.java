@@ -36,7 +36,7 @@ public class NameTagTeam {
 
             this.createPacket = new WrapperPlayServerTeams(name, WrapperPlayServerTeams.TeamMode.CREATE, info);
         } else {
-            this.createPacket = new ScoreboardPacket(name, prefix, suffix);
+            this.createPacket = new ScoreboardPacket(name, ColorUtil.color(prefix), ColorUtil.color(suffix));
         }
     }
 

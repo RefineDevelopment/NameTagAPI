@@ -47,6 +47,13 @@ public class ScoreboardPacket {
     private void setCreateFields(String name, String prefix, String suffix) {
         String collisionRule = nameTagHandler.isCollisionEnabled() ? "always" : "never";
 
+        if (prefix.length() > 16) {
+            prefix = prefix.substring(0, 16);
+        }
+        if (suffix.length() > 16) {
+            suffix = suffix.substring(0, 16);
+        }
+
         container.getModifier().writeDefaults();
         switch (VersionUtil.MINOR_VERSION) {
             case 8: {
