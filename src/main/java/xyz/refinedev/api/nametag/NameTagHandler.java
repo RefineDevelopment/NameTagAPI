@@ -63,7 +63,7 @@ public class NameTagHandler {
     /**
      * All registered teams are stored here
      */
-    private final List<NameTagTeam> registeredTeams = ObjectLists.synchronize(new ObjectArrayList<>());
+    private final List<NameTagTeam> registeredTeams = Collections.synchronizedList(new ArrayList<>());
     /**
      * The plugin registering this NameTag Handler
      */
