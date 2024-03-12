@@ -9,8 +9,6 @@ import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfo;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfoUpdate;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectLists;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -96,7 +94,13 @@ public class NameTagHandler {
 
         this.packetEvents.getEventManager().registerListener(new DisguiseListener());
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
-        Bukkit.getPluginManager().registerEvents(new GlitchFixListener(this), this.plugin);
+
+        try {
+            Class.forName("xyz.refinedev.api.tablist.util.GlitchFixEvent");
+            Bukkit.getPluginManager().registerEvents(new GlitchFixListener(this), this.plugin);
+            log.info("Found TablistAPI, hooking in...");
+        } catch (Exception ignored) {
+        }
     }
 
     /**
