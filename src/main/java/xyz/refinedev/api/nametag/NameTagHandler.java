@@ -10,8 +10,8 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPl
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfoUpdate;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectLists;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -62,11 +62,11 @@ public class NameTagHandler {
      *           <center>Viewer -> Target -> {@link NameTagTeam}</center>
      * </p>
      */
-    private final Map<UUID, Map<UUID, NameTagTeam>> teamMap = new ConcurrentHashMap<>();
+    private final Map<UUID, Map<UUID, NameTagTeam>> teamMap = new Object2ObjectOpenHashMap<>();
     /**
      * All registered teams are stored here
      */
-    private final List<NameTagTeam> registeredTeams = ObjectLists.synchronize(new ObjectArrayList<>());
+    private final List<NameTagTeam> registeredTeams = new ObjectArrayList<>();
     /**
      * The plugin registering this NameTag Handler
      */
@@ -99,7 +99,14 @@ public class NameTagHandler {
 
         this.packetEvents.getEventManager().registerListener(new DisguiseListener());
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
-        Bukkit.getPluginManager().registerEvents(new GlitchFixListener(this), this.plugin);
+
+        try {
+            Class.forName("xyz.refinedev.api.tablist.util.GlitchFixEvent");
+            Bukkit.getPluginManager().registerEvents(new GlitchFixListener(this), this.plugin);
+        } catch (Exception e) {
+            //
+        }
+
     }
 
     /**
@@ -107,6 +114,13 @@ public class NameTagHandler {
      */
     public void unload() {
         this.thread.stopExecuting();
+
+        for ( Player player : Bukkit.getOnlinePlayers() ) {
+            for ( NameTagTeam team : registeredTeams ) {
+                team.destroyFor(player);
+            }
+            this.teamMap.remove(player.getUniqueId());
+        }
     }
 
     public void registerAdapter(NameTagAdapter adapter, long ticks) {
@@ -139,10 +153,10 @@ public class NameTagHandler {
      */
     public void initiatePlayer(Player player) {
         for ( NameTagTeam teamInfo : this.registeredTeams ) {
-            if (VersionUtil.MINOR_VERSION > 12) {
+            if (VersionUtil.MINOR_VERSION > 8) {
                 PacketUtil.sendPacket(player, teamInfo.getPECreatePacket());
             } else {
-                PacketUtil.sendPacket(player, teamInfo.getNormalCreatePacket());
+                ScoreboardPacket.deliverPacket(player, teamInfo.getCreatePacket());
             }
         }
     }
@@ -208,7 +222,9 @@ public class NameTagHandler {
         }
 
         if (nameTagUpdate.getRefreshFor() == null) {
-            Bukkit.getOnlinePlayers().forEach(refreshFor -> this.reloadPlayerInternal(toRefreshPlayer, refreshFor));
+            for ( Player player : Bukkit.getOnlinePlayers() ) {
+                this.reloadPlayerInternal(toRefreshPlayer, player);
+            }
         } else {
             Player refreshForPlayer = Bukkit.getPlayer(nameTagUpdate.getRefreshFor());
 
@@ -223,12 +239,12 @@ public class NameTagHandler {
         if (provided == null) return;
 
         //TODO: Sort Priority system, by sending remove packets!!
-        if (VersionUtil.MINOR_VERSION > 12) {
+        if (VersionUtil.MINOR_VERSION > 8) {
             WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
             PacketUtil.sendPacket(refreshFor, packet);
         } else {
-            ScoreboardPacket packet = new ScoreboardPacket(provided.getName(), Collections.singletonList(toRefresh.getName()));
-            PacketUtil.sendPacket(refreshFor, packet);
+            Object packet = ScoreboardPacket.additionPacket(provided.getName(), Collections.singletonList(toRefresh.getName()));
+            ScoreboardPacket.deliverPacket(refreshFor, packet);
         }
 
         // In 1.16, the issue arises that hex color does not apply to the name of the player.
@@ -266,11 +282,7 @@ public class NameTagHandler {
         }
 
         // Update and store the new team for this target according to the viewer
-        Map<UUID, NameTagTeam> teamInfoMap = new HashMap<>();
-        if (this.teamMap.containsKey(refreshFor.getUniqueId())) {
-            teamInfoMap = this.teamMap.get(refreshFor.getUniqueId());
-        }
-
+        Map<UUID, NameTagTeam> teamInfoMap = this.teamMap.computeIfAbsent(refreshFor.getUniqueId(), (t) -> new HashMap<>());
         teamInfoMap.put(toRefresh.getUniqueId(), provided);
         this.teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
     }
@@ -309,10 +321,12 @@ public class NameTagHandler {
         }
         this.registeredTeams.add(newTeam);
 
-        if (VersionUtil.MINOR_VERSION > 12) {
+        if (VersionUtil.MINOR_VERSION > 8) {
             PacketUtil.broadcast(newTeam.getPECreatePacket());
         } else {
-            PacketUtil.broadcast(newTeam.getNormalCreatePacket());
+            for ( Player target : Bukkit.getOnlinePlayers() ) {
+                ScoreboardPacket.deliverPacket(target, newTeam.getCreatePacket());
+            }
         }
         return newTeam;
     }
