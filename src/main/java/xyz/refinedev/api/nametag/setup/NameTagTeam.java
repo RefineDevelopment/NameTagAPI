@@ -48,10 +48,6 @@ public class NameTagTeam {
        return (PacketWrapper<?>) createPacket;
     }
 
-    public ScoreboardPacket getNormalCreatePacket() {
-        return (ScoreboardPacket) createPacket;
-    }
-
     public void destroyFor(Player player) {
         WrapperPlayServerTeams packet = new WrapperPlayServerTeams(name, WrapperPlayServerTeams.TeamMode.REMOVE, new WrapperPlayServerTeams.ScoreBoardTeamInfo(
                 ColorUtil.translate(name),

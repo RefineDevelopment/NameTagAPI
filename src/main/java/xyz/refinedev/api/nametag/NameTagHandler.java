@@ -35,7 +35,6 @@ import xyz.refinedev.api.nametag.util.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This Project is property of Refine Development.
