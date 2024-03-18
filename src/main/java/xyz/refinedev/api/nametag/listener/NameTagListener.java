@@ -25,11 +25,8 @@ import xyz.refinedev.api.nametag.NameTagHandler;
  */
 @RequiredArgsConstructor
 public final class NameTagListener implements Listener {
-
     private static boolean firstJoin;
-
     private final NameTagHandler handler;
-
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {

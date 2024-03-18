@@ -29,6 +29,7 @@ import xyz.refinedev.api.nametag.util.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This Project is property of Refine Development.
@@ -56,7 +57,7 @@ public class NameTagHandler {
      * <center>Viewer -> Target -> {@link NameTagTeam}</center>
      * </p>
      */
-    private final Map<UUID, Map<UUID, NameTagTeam>> teamMap = new Object2ObjectOpenHashMap<>();
+    private final Map<UUID, Map<UUID, NameTagTeam>> teamMap = new ConcurrentHashMap<>();
     /**
      * All registered teams are stored here
      */
@@ -91,7 +92,7 @@ public class NameTagHandler {
         this.packetEvents = packetEventsAPI;
         this.adapter = new DefaultNameTagAdapter();
 
-        this.packetEvents.getEventManager().registerListener(new DisguiseListener());
+        this.packetEvents.getEventManager().registerListener(new DisguiseListener(this));
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
 
         try {
