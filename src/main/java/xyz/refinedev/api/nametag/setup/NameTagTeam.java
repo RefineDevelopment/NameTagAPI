@@ -1,5 +1,7 @@
 package xyz.refinedev.api.nametag.setup;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
 import lombok.Getter;
@@ -10,6 +12,8 @@ import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
 import xyz.refinedev.api.nametag.util.ColorUtil;
 import xyz.refinedev.api.nametag.util.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
+
+import java.util.Objects;
 
 @Getter @Setter
 public class NameTagTeam {
@@ -24,7 +28,7 @@ public class NameTagTeam {
         this.prefix = prefix;
         this.suffix = suffix;
 
-        if (VersionUtil.MINOR_VERSION > 12) {
+        if (VersionUtil.MINOR_VERSION > 8) {
             WrapperPlayServerTeams.ScoreBoardTeamInfo info = new WrapperPlayServerTeams.ScoreBoardTeamInfo(
                     ColorUtil.translate(name),
                     ColorUtil.translate(prefix),
@@ -36,16 +40,12 @@ public class NameTagTeam {
 
             this.createPacket = new WrapperPlayServerTeams(name, WrapperPlayServerTeams.TeamMode.CREATE, info);
         } else {
-            this.createPacket = new ScoreboardPacket(name, ColorUtil.color(prefix), ColorUtil.color(suffix));
+            this.createPacket = ScoreboardPacket.creationPacket(name, ColorUtil.color(prefix), ColorUtil.color(suffix));
         }
     }
 
     public PacketWrapper<?> getPECreatePacket() {
        return (PacketWrapper<?>) createPacket;
-    }
-
-    public ScoreboardPacket getNormalCreatePacket() {
-        return (ScoreboardPacket) createPacket;
     }
 
     public void destroyFor(Player player) {
@@ -59,5 +59,18 @@ public class NameTagTeam {
                         null
         ));
         PacketUtil.sendPacket(player, packet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, prefix, suffix);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof NameTagTeam)) return false;
+
+        NameTagTeam team = (NameTagTeam) object;
+        return team.getName().equals(this.name) && team.getPrefix().equals(prefix) && team.getSuffix().equals(suffix);
     }
 }

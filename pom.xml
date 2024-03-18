@@ -61,6 +61,7 @@
         </dependency>
 
         <!--Spigot-->
+
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -73,15 +74,14 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Protocol -->
         <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>5.1.0</version>
+            <groupId>org.paperspigot</groupId>
+            <artifactId>PaperSpigot</artifactId>
+            <version>1.8.8</version>
             <scope>provided</scope>
         </dependency>
 
+        <!-- Protocol -->
         <dependency>
             <groupId>xyz.refinedev.api</groupId>
             <artifactId>TablistAPI</artifactId>
