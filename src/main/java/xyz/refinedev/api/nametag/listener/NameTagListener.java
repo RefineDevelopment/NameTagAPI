@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.util.VersionUtil;
 
 /**
  * This Project is property of Refine Development.
@@ -34,19 +35,25 @@ public final class NameTagListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        // PacketEvents or maybe even bukkit is making first join
-        // miss the packets, they're getting sent before the player has logged in.
-        // So to counter this, we simply send the packets 2 ticks later (which should be enough).
-        Bukkit.getScheduler().runTaskLater(this.handler.getPlugin(), () -> {
-            if (!firstJoin) {
+        Runnable wrapper = () -> {
+            if (!NameTagListener.firstJoin) {
                 this.handler.createTeams(player);
-                firstJoin = true;
+                NameTagListener.firstJoin = true;
             } else {
                 this.handler.initiatePlayer(player);
             }
             this.handler.reloadPlayer(player);
             this.handler.reloadOthersFor(player);
-        }, 20L);
+        };
+
+        if (VersionUtil.MINOR_VERSION < 16) {
+            wrapper.run();
+        } else {
+            // PacketEvents or maybe even bukkit is making first join
+            // miss the packets, they're getting sent before the player has logged in.
+            // So to counter this, we simply send the packets 2 ticks later (which should be enough).
+            Bukkit.getScheduler().runTaskLater(this.handler.getPlugin(), wrapper, 20L);
+        }
     }
 
     @EventHandler

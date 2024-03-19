@@ -96,7 +96,7 @@ public class NameTagHandler {
         this.packetEvents = packetEventsAPI;
         this.adapter = new DefaultNameTagAdapter();
 
-        this.packetEvents.getEventManager().registerListener(new DisguiseListener());
+        this.packetEvents.getEventManager().registerListener(new DisguiseListener(this));
         Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
 
         try {
