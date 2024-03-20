@@ -1,4 +1,4 @@
-package xyz.refinedev.api.nametag.packet;
+package xyz.refinedev.api.nametag.util.packet;
 
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import xyz.refinedev.api.nametag.util.ColorUtil;
+import xyz.refinedev.api.nametag.util.chat.ColorUtil;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

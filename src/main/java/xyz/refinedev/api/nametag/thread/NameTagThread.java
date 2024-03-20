@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
-import xyz.refinedev.api.nametag.setup.NameTagUpdate;
+import xyz.refinedev.api.nametag.update.NameTagUpdate;
+import xyz.refinedev.api.nametag.util.collection.CachedSizeConcurrentLinkedQueue;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * This Project is property of Refine Development.
- * Copyright © 2023, All Rights Reserved.
+ * Copyright © 2024, All Rights Reserved.
  * Redistribution of this Project is not allowed.
  *
  * @author Drizzy
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Getter @Log4j2
 public class NameTagThread extends Thread {
 
-    private final Queue<NameTagUpdate> updatesQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<NameTagUpdate> updatesQueue = new CachedSizeConcurrentLinkedQueue<>();
     private volatile boolean running = true;
 
     private final NameTagHandler handler;
@@ -32,6 +32,39 @@ public class NameTagThread extends Thread {
 
         this.handler = nameTagHandler;
         this.ticks = ticks;
+    }
+
+    /**
+     * Submit this update to the queue.
+     *
+     * @param update {@link NameTagUpdate}
+     */
+    public void addUpdate(NameTagUpdate update) {
+        this.updatesQueue.add(update);
+    }
+
+    /**
+     * Tick this thread to start running the queued updates.
+     */
+    private void tick() {
+        while (this.updatesQueue.size() > 0) {
+            NameTagUpdate pendingUpdate = this.updatesQueue.poll();
+
+            try {
+                pendingUpdate.update(handler);
+            } catch (Exception e) {
+                log.fatal("[{}] There was an error issuing NameTagUpdate.", handler.getPlugin().getName());
+                log.error(e);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Stop executing this thread.
+     */
+    public void stopExecuting() {
+        this.running = false;
     }
 
     @Override
@@ -45,23 +78,4 @@ public class NameTagThread extends Thread {
             }
         }
     }
-
-    public void stopExecuting() {
-        this.running = false;
-    }
-
-    private void tick() {
-        while (this.updatesQueue.size() > 0) {
-            NameTagUpdate pendingUpdate = this.updatesQueue.poll();
-
-            try {
-                this.handler.applyUpdate(pendingUpdate);
-            } catch (Exception e) {
-                log.fatal("[{}] There was an error updating name-tag for {}", handler.getPlugin().getName(), pendingUpdate.getToRefresh());
-                log.error(e);
-                e.printStackTrace();
-            }
-        }
-    }
-
 }

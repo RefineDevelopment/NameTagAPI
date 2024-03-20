@@ -1,4 +1,4 @@
-package xyz.refinedev.api.nametag.util;
+package xyz.refinedev.api.nametag.util.packet;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.player.PlayerManager;

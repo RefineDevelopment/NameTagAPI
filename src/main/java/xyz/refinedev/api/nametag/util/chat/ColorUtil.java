@@ -1,4 +1,4 @@
-package xyz.refinedev.api.nametag.util;
+package xyz.refinedev.api.nametag.util.chat;
 
 import com.github.retrooper.packetevents.util.adventure.AdventureSerializer;
 import com.google.common.collect.ImmutableMap;
@@ -13,6 +13,7 @@ import net.kyori.adventure.text.format.TextColor;
 
 import org.bukkit.ChatColor;
 import xyz.refinedev.api.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.awt.*;
 import java.util.Map;

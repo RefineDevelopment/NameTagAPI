@@ -1,16 +1,14 @@
 package xyz.refinedev.api.nametag.setup;
 
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
 import lombok.Getter;
 import lombok.Setter;
 
 import org.bukkit.entity.Player;
-import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
-import xyz.refinedev.api.nametag.util.ColorUtil;
-import xyz.refinedev.api.nametag.util.PacketUtil;
+import xyz.refinedev.api.nametag.util.packet.ScoreboardPacket;
+import xyz.refinedev.api.nametag.util.chat.ColorUtil;
+import xyz.refinedev.api.nametag.util.packet.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.Objects;

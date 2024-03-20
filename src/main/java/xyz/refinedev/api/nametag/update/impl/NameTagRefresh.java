@@ -1,7 +1,9 @@
-package xyz.refinedev.api.nametag.setup;
+package xyz.refinedev.api.nametag.update.impl;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;
+import xyz.refinedev.api.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.update.NameTagUpdate;
 
 import java.util.UUID;
 
@@ -15,19 +17,25 @@ import java.util.UUID;
  * @version NameTagAPI
  */
 @Getter
-public class NameTagUpdate {
+public class NameTagRefresh implements NameTagUpdate {
 
-    private UUID toRefresh;
-    private UUID refreshFor;
+    private UUID toRefresh, refreshFor;
 
-    public NameTagUpdate(Player toRefresh) {
+    public NameTagRefresh(Player toRefresh) {
         if (toRefresh == null) return;
 
         this.toRefresh = toRefresh.getUniqueId();
     }
 
-    public NameTagUpdate(Player toRefresh, Player refreshFor) {
+    public NameTagRefresh(Player toRefresh, Player refreshFor) {
         this.toRefresh = toRefresh.getUniqueId();
         this.refreshFor = refreshFor.getUniqueId();
+    }
+
+    /**
+     * Apply this name-tag update.
+     */
+    public void update(NameTagHandler nameTagHandler) {
+        nameTagHandler.applyUpdate(this);
     }
 }
