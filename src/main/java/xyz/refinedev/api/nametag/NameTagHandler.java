@@ -10,6 +10,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPl
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfoUpdate;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
@@ -26,12 +27,13 @@ import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.api.nametag.listener.DisguiseListener;
 import xyz.refinedev.api.nametag.listener.GlitchFixListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
-import xyz.refinedev.api.nametag.packet.ScoreboardPacket;
+import xyz.refinedev.api.nametag.update.impl.NameTagRemove;
+import xyz.refinedev.api.nametag.util.packet.ScoreboardPacket;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
-import xyz.refinedev.api.nametag.setup.NameTagUpdate;
+import xyz.refinedev.api.nametag.update.impl.NameTagRefresh;
 import xyz.refinedev.api.nametag.thread.NameTagThread;
-import xyz.refinedev.api.nametag.util.ColorUtil;
-import xyz.refinedev.api.nametag.util.PacketUtil;
+import xyz.refinedev.api.nametag.util.chat.ColorUtil;
+import xyz.refinedev.api.nametag.util.packet.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.*;
@@ -118,8 +120,9 @@ public class NameTagHandler {
             for ( NameTagTeam team : registeredTeams ) {
                 team.destroyFor(player);
             }
-            this.teamMap.remove(player.getUniqueId());
         }
+
+        this.teamMap.clear();
     }
 
     public void registerAdapter(NameTagAdapter adapter, long ticks) {
@@ -169,7 +172,7 @@ public class NameTagHandler {
         for ( NameTagTeam team : registeredTeams ) {
             team.destroyFor(player);
         }
-        this.teamMap.remove(player.getUniqueId());
+        thread.addUpdate(new NameTagRemove(player.getUniqueId()));
     }
 
     /**
@@ -179,8 +182,7 @@ public class NameTagHandler {
      * @param refreshFor {@link Player} viewer
      */
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
-        NameTagUpdate update = new NameTagUpdate(toRefresh, refreshFor);
-        thread.getUpdatesQueue().add(update);
+        thread.addUpdate(new NameTagRefresh(toRefresh, refreshFor));
     }
 
     /**
@@ -189,8 +191,7 @@ public class NameTagHandler {
      * @param toRefresh {@link Player} target
      */
     public void reloadPlayer(Player toRefresh) {
-        NameTagUpdate update = new NameTagUpdate(toRefresh);
-        thread.getUpdatesQueue().add(update);
+        thread.addUpdate(new NameTagRefresh(toRefresh));
     }
 
     /**
@@ -206,26 +207,26 @@ public class NameTagHandler {
     }
 
     /**
-     * Apply the {@link NameTagUpdate} according to
+     * Apply the {@link NameTagRefresh} according to
      * the specified conditions to the viewer/target
      *
-     * @param nameTagUpdate {@link NameTagUpdate}  update
+     * @param nameTagRefresh {@link NameTagRefresh}  update
      */
-    public void applyUpdate(NameTagUpdate nameTagUpdate) {
-        if (nameTagUpdate.getToRefresh() == null) return;
+    public void applyUpdate(NameTagRefresh nameTagRefresh) {
+        if (nameTagRefresh.getToRefresh() == null) return;
 
-        Player toRefreshPlayer = Bukkit.getPlayer(nameTagUpdate.getToRefresh());
+        Player toRefreshPlayer = Bukkit.getPlayer(nameTagRefresh.getToRefresh());
 
         if (toRefreshPlayer == null) {
             return;
         }
 
-        if (nameTagUpdate.getRefreshFor() == null) {
+        if (nameTagRefresh.getRefreshFor() == null) {
             for ( Player player : Bukkit.getOnlinePlayers() ) {
                 this.reloadPlayerInternal(toRefreshPlayer, player);
             }
         } else {
-            Player refreshForPlayer = Bukkit.getPlayer(nameTagUpdate.getRefreshFor());
+            Player refreshForPlayer = Bukkit.getPlayer(nameTagRefresh.getRefreshFor());
 
             if (refreshForPlayer != null) {
                 this.reloadPlayerInternal(toRefreshPlayer, refreshForPlayer);
