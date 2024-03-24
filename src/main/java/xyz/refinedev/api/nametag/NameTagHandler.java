@@ -20,14 +20,14 @@ import xyz.refinedev.api.nametag.adapter.NameTagAdapter;
 import xyz.refinedev.api.nametag.listener.DisguiseListener;
 import xyz.refinedev.api.nametag.listener.GlitchFixListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
-import xyz.refinedev.api.nametag.update.impl.NameTagRemove;
-import xyz.refinedev.api.nametag.util.packet.ScoreboardPacket;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
-import xyz.refinedev.api.nametag.update.impl.NameTagRefresh;
 import xyz.refinedev.api.nametag.thread.NameTagThread;
+import xyz.refinedev.api.nametag.update.impl.NameTagRefresh;
+import xyz.refinedev.api.nametag.update.impl.NameTagRemove;
+import xyz.refinedev.api.nametag.util.VersionUtil;
 import xyz.refinedev.api.nametag.util.chat.ColorUtil;
 import xyz.refinedev.api.nametag.util.packet.PacketUtil;
-import xyz.refinedev.api.nametag.util.VersionUtil;
+import xyz.refinedev.api.nametag.util.packet.ScoreboardPacket;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -109,10 +109,11 @@ public class NameTagHandler {
      * Shutdown Logic of this NameTag Handler
      */
     public void unload() {
-        this.thread.stopExecuting();
+        if (thread != null)
+            this.thread.stopExecuting();
 
-        for ( Player player : Bukkit.getOnlinePlayers() ) {
-            for ( NameTagTeam team : registeredTeams ) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (NameTagTeam team : registeredTeams) {
                 team.destroyFor(player);
             }
         }
@@ -149,7 +150,7 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void initiatePlayer(Player player) {
-        for ( NameTagTeam teamInfo : this.registeredTeams ) {
+        for (NameTagTeam teamInfo : this.registeredTeams) {
             if (VersionUtil.MINOR_VERSION > 8) {
                 PacketUtil.sendPacket(player, teamInfo.getPECreatePacket());
             } else {
@@ -217,7 +218,7 @@ public class NameTagHandler {
         }
 
         if (nameTagRefresh.getRefreshFor() == null) {
-            for ( Player player : Bukkit.getOnlinePlayers() ) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
                 this.reloadPlayerInternal(toRefreshPlayer, player);
             }
         } else {
@@ -318,7 +319,7 @@ public class NameTagHandler {
         if (VersionUtil.MINOR_VERSION > 8) {
             PacketUtil.broadcast(newTeam.getPECreatePacket());
         } else {
-            for ( Player target : Bukkit.getOnlinePlayers() ) {
+            for (Player target : Bukkit.getOnlinePlayers()) {
                 ScoreboardPacket.deliverPacket(target, newTeam.getCreatePacket());
             }
         }
