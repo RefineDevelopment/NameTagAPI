@@ -10,7 +10,6 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPl
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfoUpdate;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
@@ -169,6 +168,8 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void unloadPlayer(Player player) {
+        if (this.thread == null) return;
+
         for ( NameTagTeam team : registeredTeams ) {
             team.destroyFor(player);
         }
@@ -182,6 +183,8 @@ public class NameTagHandler {
      * @param refreshFor {@link Player} viewer
      */
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
+        if (this.thread == null) return;
+
         thread.addUpdate(new NameTagRefresh(toRefresh, refreshFor));
     }
 
@@ -191,6 +194,8 @@ public class NameTagHandler {
      * @param toRefresh {@link Player} target
      */
     public void reloadPlayer(Player toRefresh) {
+        if (this.thread == null) return;
+
         thread.addUpdate(new NameTagRefresh(toRefresh));
     }
 
