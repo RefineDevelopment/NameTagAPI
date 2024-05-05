@@ -90,9 +90,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.retrooper.packetevents</groupId>
-            <artifactId>spigot</artifactId>
-            <version>2.2.1</version>
+            <groupId>com.github.retrooper</groupId>
+            <artifactId>packetevents-spigot</artifactId>
+            <version>2.2.1-DEV</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
