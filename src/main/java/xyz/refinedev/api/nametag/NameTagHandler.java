@@ -178,6 +178,8 @@ public class NameTagHandler {
      * @param refreshFor {@link Player} viewer
      */
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
+        if (this.thread == null) return;
+
         thread.addUpdate(new NameTagRefresh(toRefresh, refreshFor));
     }
 
@@ -187,6 +189,8 @@ public class NameTagHandler {
      * @param toRefresh {@link Player} target
      */
     public void reloadPlayer(Player toRefresh) {
+        if (this.thread == null) return;
+
         thread.addUpdate(new NameTagRefresh(toRefresh));
     }
 

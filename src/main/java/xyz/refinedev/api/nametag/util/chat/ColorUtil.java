@@ -3,6 +3,7 @@ package xyz.refinedev.api.nametag.util.chat;
 import com.github.retrooper.packetevents.util.adventure.AdventureSerializer;
 import com.google.common.collect.ImmutableMap;
 
+import gnu.trove.Version;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
@@ -52,6 +53,10 @@ public class ColorUtil {
         net.md_5.bungee.api.ChatColor md5Color = color.asBungee();
         if (NameTagHandler.getInstance().isDebugMode()) {
             log.info("Last color is {} " + getRaw(md5Color.toString()));
+        }
+
+        if (!VersionUtil.canHex()) {
+            return ConversionUtil.bungeeToNamedTextColor(md5Color);
         }
 
         if (md5Color.getColor() == null) {
