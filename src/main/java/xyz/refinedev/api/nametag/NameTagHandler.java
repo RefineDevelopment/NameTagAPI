@@ -144,6 +144,8 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void createTeams(Player player) {
+        if (this.thread == null) return;
+
         this.adapter.fetchNameTag(player, player);
     }
 
@@ -153,6 +155,8 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void initiatePlayer(Player player) {
+        if (this.thread == null) return;
+
         for ( NameTagTeam teamInfo : this.registeredTeams ) {
             if (VersionUtil.MINOR_VERSION > 8) {
                 PacketUtil.sendPacket(player, teamInfo.getPECreatePacket());
@@ -185,6 +189,11 @@ public class NameTagHandler {
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
         if (this.thread == null) return;
 
+        if (!Bukkit.isPrimaryThread()) {
+            this.reloadPlayerInternal(toRefresh, refreshFor);
+            return;
+        }
+
         thread.addUpdate(new NameTagRefresh(toRefresh, refreshFor));
     }
 
@@ -196,6 +205,11 @@ public class NameTagHandler {
     public void reloadPlayer(Player toRefresh) {
         if (this.thread == null) return;
 
+        if (!Bukkit.isPrimaryThread()) {
+            this.applyUpdate(new NameTagRefresh(toRefresh));
+            return;
+        }
+
         thread.addUpdate(new NameTagRefresh(toRefresh));
     }
 
@@ -205,10 +219,17 @@ public class NameTagHandler {
      * @param refreshFor {@link Player} viewer
      */
     public void reloadOthersFor(Player refreshFor) {
-        for (Player toRefresh : Bukkit.getOnlinePlayers()) {
-            if (refreshFor == toRefresh) continue;
-            this.reloadPlayer(toRefresh, refreshFor);
+        if (this.thread == null) return;
+
+        if (!Bukkit.isPrimaryThread()) {
+            for (Player toRefresh : Bukkit.getOnlinePlayers()) {
+                if (refreshFor == toRefresh) continue;
+                this.reloadPlayerInternal(toRefresh, refreshFor);
+            }
+            return;
         }
+
+        thread.addUpdate(new NameTagRefresh(refreshFor, true));
     }
 
     /**
@@ -221,6 +242,13 @@ public class NameTagHandler {
         if (nameTagRefresh.getToRefresh() == null) return;
 
         Player toRefreshPlayer = Bukkit.getPlayer(nameTagRefresh.getToRefresh());
+        if (nameTagRefresh.isGlobal()) {
+            Player refreshFor = Bukkit.getPlayer(nameTagRefresh.getRefreshFor());
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                this.reloadPlayerInternal(player, refreshFor);
+            }
+            return;
+        }
 
         if (toRefreshPlayer == null) {
             return;
