@@ -20,6 +20,12 @@ import java.util.UUID;
 public class NameTagRefresh implements NameTagUpdate {
 
     private UUID toRefresh, refreshFor;
+    private boolean global;
+
+    public NameTagRefresh(Player refreshFor, boolean global) {
+        this.global = global;
+        this.refreshFor = refreshFor.getUniqueId();
+    }
 
     public NameTagRefresh(Player toRefresh) {
         if (toRefresh == null) return;

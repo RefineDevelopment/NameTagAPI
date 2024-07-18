@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
  * Redistribution of this Project is not allowed.
  *
  * @author Drizzy
- * @version NameTagAPI
  * @since 9/12/2023
+ * @version NameTagAPI
  */
 public class DefaultNameTagAdapter extends NameTagAdapter {
 

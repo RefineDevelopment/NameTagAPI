@@ -20,6 +20,7 @@ import xyz.refinedev.api.tablist.util.GlitchFixEvent;
  */
 @RequiredArgsConstructor
 public class GlitchFixListener implements Listener {
+
     private final NameTagHandler nameTagHandler;
 
     @EventHandler

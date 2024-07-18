@@ -8,12 +8,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
 import xyz.refinedev.api.nametag.util.VersionUtil;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This Project is property of Refine Development.
@@ -26,8 +27,11 @@ import xyz.refinedev.api.nametag.util.VersionUtil;
  */
 @RequiredArgsConstructor
 public final class NameTagListener implements Listener {
+
     private static boolean firstJoin;
+
     private final NameTagHandler handler;
+
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -45,12 +49,12 @@ public final class NameTagListener implements Listener {
         };
 
         if (VersionUtil.MINOR_VERSION < 16) {
-            wrapper.run();
+            CompletableFuture.runAsync(wrapper);
         } else {
             // PacketEvents or maybe even bukkit is making first join
             // miss the packets, they're getting sent before the player has logged in.
             // So to counter this, we simply send the packets 2 ticks later (which should be enough).
-            Bukkit.getScheduler().runTaskLater(this.handler.getPlugin(), wrapper, 20L);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(this.handler.getPlugin(), wrapper, 20L);
         }
     }
 

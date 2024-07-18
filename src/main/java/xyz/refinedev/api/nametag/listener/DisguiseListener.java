@@ -25,6 +25,7 @@ import static com.github.retrooper.packetevents.protocol.packettype.PacketType.P
 
 @RequiredArgsConstructor
 public class DisguiseListener extends SimplePacketListenerAbstract {
+
     private final NameTagHandler nameTagHandler;
 
     public void onPacketPlaySend(PacketPlaySendEvent event) {
