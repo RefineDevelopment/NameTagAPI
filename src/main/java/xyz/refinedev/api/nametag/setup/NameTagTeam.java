@@ -2,6 +2,7 @@ package xyz.refinedev.api.nametag.setup;
 
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
+
 import lombok.Getter;
 import lombok.Setter;
 

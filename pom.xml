@@ -15,7 +15,7 @@
 
     <groupId>xyz.refinedev.api</groupId>
     <artifactId>NameTagAPI</artifactId>
-    <version>2.2</version>
+    <version>2.3</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -97,9 +97,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.retrooper.packetevents</groupId>
-            <artifactId>spigot</artifactId>
-            <version>2.2.1</version>
+            <groupId>com.github.retrooper</groupId>
+            <artifactId>packetevents-spigot</artifactId>
+            <version>2.4.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
