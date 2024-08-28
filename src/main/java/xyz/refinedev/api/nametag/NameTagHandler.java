@@ -329,22 +329,22 @@ public class NameTagHandler {
      * @param suffix {@link String} Raw Suffix
      * @return {@link NameTagTeam} Associated Team
      */
-    public NameTagTeam getOrCreate(String name, String prefix, String suffix) {
+    public NameTagTeam getOrCreate(String name, String prefix, String suffix, boolean invis) {
         if (debugMode) {
             log.info("[NameTagAPI-Debug] Trying to fetch a team with prefix {} and suffix {}", ColorUtil.getRaw(prefix), ColorUtil.getRaw(suffix));
         }
 
-        if (cachedTeam != null && cachedTeam.getName().equals(name) && cachedTeam.getPrefix().equals(prefix) && cachedTeam.getSuffix().equals(suffix)) {
+        if (cachedTeam != null && cachedTeam.isInvis() == invis && cachedTeam.getName().equals(name) && cachedTeam.getPrefix().equals(prefix) && cachedTeam.getSuffix().equals(suffix)) {
             return (cachedTeam);
         }
 
         for (NameTagTeam teamInfo : registeredTeams) {
-            if (teamInfo.getName().equals(name) && teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
+            if (teamInfo.isInvis() == invis && teamInfo.getName().equals(name) && teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
                 return teamInfo;
             }
         }
 
-        NameTagTeam newTeam = new NameTagTeam(name, prefix, suffix, collisionEnabled);
+        NameTagTeam newTeam = new NameTagTeam(name, prefix, suffix, invis, collisionEnabled);
         cachedTeam = newTeam;
         if (debugMode) {
             log.info("[NameTagAPI-Debug] Creating Team with Name: {} with Prefix {} and Suffix {}", newTeam.getName(), ColorUtil.getRaw(newTeam.getPrefix()), ColorUtil.getRaw(newTeam.getSuffix()));

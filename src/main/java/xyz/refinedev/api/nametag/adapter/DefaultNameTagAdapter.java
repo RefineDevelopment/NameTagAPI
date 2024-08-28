@@ -1,6 +1,7 @@
 package xyz.refinedev.api.nametag.adapter;
 
 import org.bukkit.ChatColor;
+import org.bukkit.potion.PotionEffectType;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
 
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class DefaultNameTagAdapter extends NameTagAdapter {
      * @return           {@link NameTagTeam} The NameTag Entry used for updates
      */
     public NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor) {
-        return (createNameTag("refine", ChatColor.RED + "[Refine] " + ChatColor.WHITE, ""));
+        return (createNameTag("refine", ChatColor.RED + "[Refine] " + ChatColor.WHITE, "", toRefresh.hasPotionEffect(PotionEffectType.INVISIBILITY)));
     }
 
 }

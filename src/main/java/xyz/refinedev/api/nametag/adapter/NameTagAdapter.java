@@ -37,7 +37,7 @@ public abstract class NameTagAdapter {
      * @param suffix {@link String suffix}
      * @return       {@link NameTagTeam Name Tag info}
      */
-    public NameTagTeam createNameTag(String name, String prefix, String suffix) {
-        return NameTagHandler.getInstance().getOrCreate(name, prefix, suffix);
+    public NameTagTeam createNameTag(String name, String prefix, String suffix, boolean invis) {
+        return NameTagHandler.getInstance().getOrCreate(name, prefix, suffix, invis);
     }
 }
