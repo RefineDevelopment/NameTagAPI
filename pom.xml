@@ -6,7 +6,7 @@
 
     <name>NameTagAPI</name>
     <url>https://dsc.gg/refine</url>
-    <description>Most Modern and Support Friendly NameTag API | Fork of FrozenOrb's API</description>
+    <description>Most Modern and Support Friendly NameTag API</description>
 
     <organization>
         <name>Refine Development</name>
@@ -15,7 +15,7 @@
 
     <groupId>xyz.refinedev.api</groupId>
     <artifactId>NameTagAPI</artifactId>
-    <version>2.3</version>
+    <version>2.4</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -46,8 +46,8 @@
 
     <distributionManagement>
         <repository>
-            <id>refine-releases</id>
-            <url>https://maven.refinedev.xyz/maven-releases</url>
+            <id>refine-public</id>
+            <url>https://maven.refinedev.xyz/public-repo</url>
         </repository>
     </distributionManagement>
 
