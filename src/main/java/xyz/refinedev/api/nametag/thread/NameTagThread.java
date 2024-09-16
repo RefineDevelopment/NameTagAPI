@@ -33,13 +33,13 @@ public class NameTagThread {
 
     // Executor services for scheduling and update processing
     private final ScheduledExecutorService scheduler;
-    private final ExecutorService updateExecutor;
+    //private final ExecutorService updateExecutor;
 
     public NameTagThread(NameTagHandler nameTagHandler, long ticks) {
         this.handler = nameTagHandler;
         this.ticks = ticks;
 
-        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("Bolt - NameTag-%d")
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("Bolt - NameTag")
                 .setPriority(Thread.NORM_PRIORITY - 1)
                 .setDaemon(true)
                 .setUncaughtExceptionHandler((a, e) -> {
@@ -49,7 +49,7 @@ public class NameTagThread {
                 .build();
 
         this.scheduler = Executors.newSingleThreadScheduledExecutor(threadFactory);
-        this.updateExecutor = Executors.newFixedThreadPool(2, threadFactory);
+        //this.updateExecutor = Executors.newFixedThreadPool(2, threadFactory);
 
         // Schedule the periodic task to process updates
         scheduler.scheduleAtFixedRate(this::tick, 0, ticks * 50, TimeUnit.MILLISECONDS);
@@ -70,7 +70,6 @@ public class NameTagThread {
     public void stopExecuting() {
         this.running = false;
         scheduler.shutdown();
-        updateExecutor.shutdown();
     }
 
     /**
@@ -80,14 +79,14 @@ public class NameTagThread {
         while (running && !updatesQueue.isEmpty()) {
             NameTagUpdate pendingUpdate = updatesQueue.poll();
             if (pendingUpdate != null) {
-                updateExecutor.submit(() -> {
+                //updateExecutor.submit(() -> {
                     try {
                         pendingUpdate.update(handler);
                     } catch (Exception e) {
                         log.fatal("[{}] There was an error issuing NameTagUpdate.", handler.getPlugin().getName());
-                        log.error(e);
+                        e.printStackTrace();
                     }
-                });
+                //});
             }
         }
     }

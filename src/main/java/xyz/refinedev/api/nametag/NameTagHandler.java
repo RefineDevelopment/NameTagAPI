@@ -188,7 +188,7 @@ public class NameTagHandler {
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
         if (this.thread == null) return;
 
-        if (Thread.currentThread().getName().contains("Bolt - NameTag")) {
+        if (!Bukkit.isPrimaryThread()) {
             this.reloadPlayerInternal(toRefresh, refreshFor);
             return;
         }
@@ -204,7 +204,7 @@ public class NameTagHandler {
     public void reloadPlayer(Player toRefresh) {
         if (this.thread == null) return;
 
-        if (Thread.currentThread().getName().contains("Bolt - NameTag")) {
+        if (!Bukkit.isPrimaryThread()) {
             this.applyUpdate(new NameTagRefresh(toRefresh));
             return;
         }
@@ -220,7 +220,7 @@ public class NameTagHandler {
     public void reloadOthersFor(Player refreshFor) {
         if (this.thread == null) return;
 
-        if (Thread.currentThread().getName().contains("Bolt - NameTag")) {
+        if (!Bukkit.isPrimaryThread()) {
             for (Player toRefresh : Bukkit.getOnlinePlayers()) {
                 if (refreshFor == toRefresh) continue;
                 this.reloadPlayerInternal(toRefresh, refreshFor);

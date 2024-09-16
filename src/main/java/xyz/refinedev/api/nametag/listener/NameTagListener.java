@@ -39,10 +39,11 @@ public final class NameTagListener implements Listener {
         // PacketEvents or maybe even bukkit is making first join
         // miss the packets, they're getting sent before the player has logged in.
         // So to counter this, we simply send the packets 2 ticks later (which should be enough).
-        Bukkit.getScheduler().runTaskLater(this.handler.getPlugin(), () -> {
-            NameTagInitiate initiate = new NameTagInitiate(player);
-            this.handler.getThread().addUpdate(initiate);
-        }, 20L);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this.handler.getPlugin(), () -> {
+            handler.initiatePlayer(player);
+            handler.reloadPlayer(player);
+            handler.reloadOthersFor(player);
+        }, 2L);
     }
 
     @EventHandler
