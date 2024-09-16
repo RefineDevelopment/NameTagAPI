@@ -19,14 +19,14 @@ public class NameTagTeam {
     private final String name;
     private final String prefix;
     private final String suffix;
-    private final PacketWrapper<?> createPacket;
+    private final WrapperPlayServerTeams.ScoreBoardTeamInfo info;
 
     public NameTagTeam(String name, String prefix, String suffix, boolean collide) {
         this.name = name;
         this.prefix = prefix;
         this.suffix = suffix;
 
-        WrapperPlayServerTeams.ScoreBoardTeamInfo info = new WrapperPlayServerTeams.ScoreBoardTeamInfo(
+        this.info = new WrapperPlayServerTeams.ScoreBoardTeamInfo(
                 ColorUtil.translate(name),
                 ColorUtil.translate(prefix),
                 ColorUtil.translate(suffix),
@@ -34,8 +34,6 @@ public class NameTagTeam {
                 collide ? WrapperPlayServerTeams.CollisionRule.ALWAYS : WrapperPlayServerTeams.CollisionRule.NEVER,
                 VersionUtil.MINOR_VERSION <= 12 ? null : ColorUtil.getLastColor(prefix),
                 WrapperPlayServerTeams.OptionData.NONE);
-
-        this.createPacket = new WrapperPlayServerTeams(name, WrapperPlayServerTeams.TeamMode.CREATE, info);
     }
 
     public void destroyFor(Player player) {
@@ -49,6 +47,10 @@ public class NameTagTeam {
                         null
         ));
         PacketUtil.sendPacket(player, packet);
+    }
+
+    public PacketWrapper<?> getCreatePacket() {
+        return new WrapperPlayServerTeams(name, WrapperPlayServerTeams.TeamMode.CREATE, info);
     }
 
     @Override

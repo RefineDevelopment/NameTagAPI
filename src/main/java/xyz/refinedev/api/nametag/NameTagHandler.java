@@ -127,8 +127,8 @@ public class NameTagHandler {
         this.adapter = adapter == null ? new DefaultNameTagAdapter() : adapter;
 
         if (ticks < 1L) {
-            log.info("[{}] Provided refresh tick rate for NameTag is too low, reverting to 2 ticks!", plugin.getName());
-            ticks = 2L;
+            log.info("[{}] Provided refresh tick rate for NameTag is too low, reverting to 20 ticks!", plugin.getName());
+            ticks = 20L;
         }
 
         this.thread = new NameTagThread(this, ticks);
@@ -263,7 +263,7 @@ public class NameTagHandler {
         // Netty wakeup calls are expensive!!
         String previousName = teamInfoMap.get(toRefresh.getUniqueId());
         NameTagTeam previous = previousName == null ? null : this.getByName(previousName);
-        if (previous != null && previous.getSuffix().equals(provided.getSuffix()) && previous.getPrefix().equals(provided.getPrefix())) {
+        if (provided.equals(previous)) {
             return;
         }
 
