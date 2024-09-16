@@ -27,7 +27,6 @@ import xyz.refinedev.api.nametag.listener.DisguiseListener;
 import xyz.refinedev.api.nametag.listener.GlitchFixListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
 import xyz.refinedev.api.nametag.update.impl.NameTagRemove;
-import xyz.refinedev.api.nametag.util.packet.ScoreboardPacket;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
 import xyz.refinedev.api.nametag.update.impl.NameTagRefresh;
 import xyz.refinedev.api.nametag.thread.NameTagThread;
@@ -36,6 +35,7 @@ import xyz.refinedev.api.nametag.util.packet.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This Project is property of Refine Development.
@@ -62,11 +62,12 @@ public class NameTagHandler {
      *           <center>Viewer -> Target -> {@link NameTagTeam}</center>
      * </p>
      */
-    private final Map<UUID, Map<UUID, NameTagTeam>> teamMap = new Object2ObjectOpenHashMap<>();
+    private final Map<UUID, Map<UUID, String>> teamMap = new ConcurrentHashMap<>();
     /**
      * All registered teams are stored here
      */
-    private final List<NameTagTeam> registeredTeams = new ObjectArrayList<>();
+    private final Map<String, NameTagTeam> teamCache = new ConcurrentHashMap<>();
+    private static final String SEPARATOR = "::"; // Separator for prefix-suffix keys
     /**
      * The plugin registering this NameTag Handler
      */
@@ -86,7 +87,6 @@ public class NameTagHandler {
     public NameTagHandler(JavaPlugin plugin) {
         instance = this;
         this.plugin = plugin;
-        this.debugMode = Boolean.getBoolean("BDebug");
     }
 
     /**
@@ -96,10 +96,9 @@ public class NameTagHandler {
     public void init(PacketEventsAPI<?> packetEventsAPI) {
         this.packetEvents = packetEventsAPI;
         this.adapter = new DefaultNameTagAdapter();
-
         this.packetEvents.getEventManager().registerListener(new DisguiseListener(this));
-        Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
 
+        Bukkit.getPluginManager().registerEvents(new NameTagListener(this), this.plugin);
         try {
             Class.forName("xyz.refinedev.api.tablist.util.GlitchFixEvent");
             Bukkit.getPluginManager().registerEvents(new GlitchFixListener(this), this.plugin);
@@ -116,7 +115,7 @@ public class NameTagHandler {
         this.thread.stopExecuting();
 
         for ( Player player : Bukkit.getOnlinePlayers() ) {
-            for ( NameTagTeam team : registeredTeams ) {
+            for ( NameTagTeam team : this.teamCache.values() ) {
                 team.destroyFor(player);
             }
         }
@@ -133,7 +132,6 @@ public class NameTagHandler {
         }
 
         this.thread = new NameTagThread(this, ticks);
-        this.thread.start();
     }
 
     /**
@@ -157,12 +155,13 @@ public class NameTagHandler {
     public void initiatePlayer(Player player) {
         if (this.thread == null) return;
 
-        for ( NameTagTeam teamInfo : this.registeredTeams ) {
-            if (VersionUtil.MINOR_VERSION > 8) {
-                PacketUtil.sendPacket(player, teamInfo.getPECreatePacket());
-            } else {
-                ScoreboardPacket.deliverPacket(player, teamInfo.getCreatePacket());
-            }
+        if (this.teamCache.isEmpty()) {
+            this.adapter.fetchNameTag(player, player);
+            return;
+        }
+
+        for ( NameTagTeam teamInfo : this.teamCache.values() ) {
+            PacketUtil.sendPacket(player, teamInfo.getCreatePacket());
         }
     }
 
@@ -174,7 +173,7 @@ public class NameTagHandler {
     public void unloadPlayer(Player player) {
         if (this.thread == null) return;
 
-        for ( NameTagTeam team : registeredTeams ) {
+        for ( NameTagTeam team : this.teamCache.values() ) {
             team.destroyFor(player);
         }
         thread.addUpdate(new NameTagRemove(player.getUniqueId()));
@@ -189,7 +188,7 @@ public class NameTagHandler {
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
         if (this.thread == null) return;
 
-        if (!Bukkit.isPrimaryThread()) {
+        if (Thread.currentThread().getName().contains("Bolt - NameTag")) {
             this.reloadPlayerInternal(toRefresh, refreshFor);
             return;
         }
@@ -205,7 +204,7 @@ public class NameTagHandler {
     public void reloadPlayer(Player toRefresh) {
         if (this.thread == null) return;
 
-        if (!Bukkit.isPrimaryThread()) {
+        if (Thread.currentThread().getName().contains("Bolt - NameTag")) {
             this.applyUpdate(new NameTagRefresh(toRefresh));
             return;
         }
@@ -221,7 +220,7 @@ public class NameTagHandler {
     public void reloadOthersFor(Player refreshFor) {
         if (this.thread == null) return;
 
-        if (!Bukkit.isPrimaryThread()) {
+        if (Thread.currentThread().getName().contains("Bolt - NameTag")) {
             for (Player toRefresh : Bukkit.getOnlinePlayers()) {
                 if (refreshFor == toRefresh) continue;
                 this.reloadPlayerInternal(toRefresh, refreshFor);
@@ -239,9 +238,6 @@ public class NameTagHandler {
      * @param nameTagRefresh {@link NameTagRefresh}  update
      */
     public void applyUpdate(NameTagRefresh nameTagRefresh) {
-        if (nameTagRefresh.getToRefresh() == null) return;
-
-        Player toRefreshPlayer = Bukkit.getPlayer(nameTagRefresh.getToRefresh());
         if (nameTagRefresh.isGlobal()) {
             Player refreshFor = Bukkit.getPlayer(nameTagRefresh.getRefreshFor());
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -250,6 +246,7 @@ public class NameTagHandler {
             return;
         }
 
+        Player toRefreshPlayer = Bukkit.getPlayer(nameTagRefresh.getToRefresh());
         if (toRefreshPlayer == null) {
             return;
         }
@@ -271,14 +268,18 @@ public class NameTagHandler {
         NameTagTeam provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
         if (provided == null) return;
 
-        //TODO: Sort Priority system, by sending remove packets!!
-        if (VersionUtil.MINOR_VERSION > 8) {
-            WrapperPlayServerTeams packet = new WrapperPlayServerTeams(provided.getName(), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
-            PacketUtil.sendPacket(refreshFor, packet);
-        } else {
-            Object packet = ScoreboardPacket.additionPacket(provided.getName(), Collections.singletonList(toRefresh.getName()));
-            ScoreboardPacket.deliverPacket(refreshFor, packet);
+        Map<UUID, String> teamInfoMap = this.teamMap.computeIfAbsent(refreshFor.getUniqueId(), (t) -> new HashMap<>());
+
+        // Don't spam repeat the same NameTag to the client
+        // Netty wakeup calls are expensive!!
+        String previousName = teamInfoMap.get(toRefresh.getUniqueId());
+        NameTagTeam previous = previousName == null ? null : this.getByName(previousName);
+        if (previous != null && previous.getSuffix().equals(provided.getSuffix()) && previous.getPrefix().equals(provided.getPrefix())) {
+            return;
         }
+
+        WrapperPlayServerTeams packet = new WrapperPlayServerTeams(ColorUtil.color(provided.getName()), WrapperPlayServerTeams.TeamMode.ADD_ENTITIES, (WrapperPlayServerTeams.ScoreBoardTeamInfo) null, toRefresh.getName());
+        PacketUtil.sendPacket(refreshFor, packet);
 
         // In 1.16, the issue arises that hex color does not apply to the name of the player.
         // This is due to the ScoreboardTeam color being applied to the name, which is a plain enum with normal colors.
@@ -315,12 +316,9 @@ public class NameTagHandler {
         }
 
         // Update and store the new team for this target according to the viewer
-        Map<UUID, NameTagTeam> teamInfoMap = this.teamMap.computeIfAbsent(refreshFor.getUniqueId(), (t) -> new HashMap<>());
-        teamInfoMap.put(toRefresh.getUniqueId(), provided);
+        teamInfoMap.put(toRefresh.getUniqueId(), provided.getName());
         this.teamMap.put(refreshFor.getUniqueId(), teamInfoMap);
     }
-
-    private NameTagTeam cachedTeam;
 
     /**
      * Get a {@link NameTagTeam} associated with the given prefix and suffix.
@@ -335,32 +333,41 @@ public class NameTagHandler {
             log.info("[NameTagAPI-Debug] Trying to fetch a team with prefix {} and suffix {}", ColorUtil.getRaw(prefix), ColorUtil.getRaw(suffix));
         }
 
-        if (cachedTeam != null && cachedTeam.getPrefix().equals(prefix) && cachedTeam.getSuffix().equals(suffix)) {
-            return (cachedTeam);
+        // Create the unique key for caching
+        String key = prefix + SEPARATOR + suffix;
+
+        // Attempt to get the team from the cache
+        NameTagTeam team = teamCache.get(key);
+        if (team != null) {
+            return team;
         }
 
-        for ( NameTagTeam teamInfo : registeredTeams) {
-            if (teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
-                return (teamInfo);
-            }
-        }
+        // Team doesn't exist; create a new one
         TEAM_INDEX++;
-
         NameTagTeam newTeam = new NameTagTeam("boltNT" + TEAM_INDEX, prefix, suffix, collisionEnabled);
-        cachedTeam = newTeam;
+
+        // Cache the newly created team
+        teamCache.put(key, newTeam);
 
         if (debugMode) {
             log.info("[NameTagAPI-Debug] Creating Team with Name: {} with Prefix {} and Suffix {}", newTeam.getName(), ColorUtil.getRaw(newTeam.getPrefix()), ColorUtil.getRaw(newTeam.getSuffix()));
         }
-        this.registeredTeams.add(newTeam);
 
-        if (VersionUtil.MINOR_VERSION > 8) {
-            PacketUtil.broadcast(newTeam.getPECreatePacket());
-        } else {
-            for ( Player target : Bukkit.getOnlinePlayers() ) {
-                ScoreboardPacket.deliverPacket(target, newTeam.getCreatePacket());
-            }
-        }
+        PacketUtil.broadcast(newTeam.getCreatePacket());
+
         return newTeam;
+    }
+
+    /**
+     * Get a {@link NameTagTeam} by its name.
+     *
+     * @param name The name of the team to retrieve.
+     * @return The {@link NameTagTeam} with the specified name, or null if not found.
+     */
+    public NameTagTeam getByName(String name) {
+        return teamCache.values().stream()
+                .filter(team -> team.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 }

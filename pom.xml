@@ -27,6 +27,10 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
@@ -35,19 +39,15 @@
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
             <id>refine-public</id>
-            <url>https://maven.refinedev.xyz/repository/public-repo/</url>
+            <url>https://maven.refinedev.xyz/public-repo</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
             <id>refine-releases</id>
-            <url>https://maven.refinedev.xyz/repository/maven-releases/</url>
+            <url>https://maven.refinedev.xyz/maven-releases</url>
         </repository>
     </distributionManagement>
 
@@ -92,14 +92,13 @@
         <dependency>
             <groupId>xyz.refinedev.api</groupId>
             <artifactId>TablistAPI</artifactId>
-            <version>2.1</version>
+            <version>2.2</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
-            <groupId>com.github.retrooper</groupId>
-            <artifactId>packetevents-spigot</artifactId>
-            <version>2.4.0</version>
+            <groupId>com.github.retrooper.packetevents</groupId>
+            <artifactId>spigot</artifactId>
+            <version>2.3.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -109,6 +108,14 @@
                 <exclusion>
                     <groupId>org.jetbrains</groupId>
                     <artifactId>annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.retrooper.packetevents</groupId>
+                    <artifactId>api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.retrooper.packetevents</groupId>
+                    <artifactId>netty-common</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

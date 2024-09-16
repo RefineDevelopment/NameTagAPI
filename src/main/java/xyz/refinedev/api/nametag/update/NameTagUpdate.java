@@ -20,4 +20,6 @@ public interface NameTagUpdate {
      */
     void update(NameTagHandler nameTagHandler);
 
+    int getPriority();
+
 }

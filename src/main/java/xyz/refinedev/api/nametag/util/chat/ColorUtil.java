@@ -148,7 +148,7 @@ public class ColorUtil {
      * @return       {@link Component}
      */
     public Component translate(String string) {
-        return AdventureSerializer.fromLegacyFormat(color(string));
+        return Component.text(color(string));
     }
 
     public String getRaw(String string) {

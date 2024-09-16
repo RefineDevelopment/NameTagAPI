@@ -1,13 +1,16 @@
 package xyz.refinedev.api.nametag.thread;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
 import xyz.refinedev.api.nametag.update.NameTagUpdate;
-import xyz.refinedev.api.nametag.util.collection.CachedSizeConcurrentLinkedQueue;
 
+import java.util.Comparator;
 import java.util.Queue;
+import java.util.concurrent.*;
 
 /**
  * This Project is property of Refine Development.
@@ -18,20 +21,38 @@ import java.util.Queue;
  * @since 9/12/2023
  * @version NameTagAPI
  */
-@Getter @Log4j2
-public class NameTagThread extends Thread {
+@Getter
+@Log4j2
+public class NameTagThread {
 
-    private final Queue<NameTagUpdate> updatesQueue = new CachedSizeConcurrentLinkedQueue<>();
+    private final Queue<NameTagUpdate> updatesQueue = new PriorityBlockingQueue<>(11, Comparator.comparingInt(NameTagUpdate::getPriority).reversed());
     private volatile boolean running = true;
 
     private final NameTagHandler handler;
     private final long ticks;
 
-    public NameTagThread(NameTagHandler nameTagHandler, long ticks) {
-        super(nameTagHandler.getPlugin().getName() + " - NameTag Thread");
+    // Executor services for scheduling and update processing
+    private final ScheduledExecutorService scheduler;
+    private final ExecutorService updateExecutor;
 
+    public NameTagThread(NameTagHandler nameTagHandler, long ticks) {
         this.handler = nameTagHandler;
         this.ticks = ticks;
+
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("Bolt - NameTag-%d")
+                .setPriority(Thread.NORM_PRIORITY - 1)
+                .setDaemon(true)
+                .setUncaughtExceptionHandler((a, e) -> {
+                    log.fatal("[{}] There was an error in the Thread {}.", handler.getPlugin().getName(), a.getName());
+                    log.error(e);
+                })
+                .build();
+
+        this.scheduler = Executors.newSingleThreadScheduledExecutor(threadFactory);
+        this.updateExecutor = Executors.newFixedThreadPool(2, threadFactory);
+
+        // Schedule the periodic task to process updates
+        scheduler.scheduleAtFixedRate(this::tick, 0, ticks * 50, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -44,37 +65,29 @@ public class NameTagThread extends Thread {
     }
 
     /**
-     * Tick this thread to start running the queued updates.
-     */
-    private void tick() {
-        while (this.updatesQueue.size() > 0) {
-            NameTagUpdate pendingUpdate = this.updatesQueue.poll();
-
-            try {
-                pendingUpdate.update(handler);
-            } catch (Exception e) {
-                log.fatal("[{}] There was an error issuing NameTagUpdate.", handler.getPlugin().getName());
-                log.error(e);
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
      * Stop executing this thread.
      */
     public void stopExecuting() {
         this.running = false;
+        scheduler.shutdown();
+        updateExecutor.shutdown();
     }
 
-    @Override
-    public void run() {
-        while (running) {
-            try {
-                this.tick();
-                Thread.sleep(ticks * 50);
-            } catch (InterruptedException e) {
-                this.stopExecuting();
+    /**
+     * Tick this thread to start running the queued updates.
+     */
+    private void tick() {
+        while (running && !updatesQueue.isEmpty()) {
+            NameTagUpdate pendingUpdate = updatesQueue.poll();
+            if (pendingUpdate != null) {
+                updateExecutor.submit(() -> {
+                    try {
+                        pendingUpdate.update(handler);
+                    } catch (Exception e) {
+                        log.fatal("[{}] There was an error issuing NameTagUpdate.", handler.getPlugin().getName());
+                        log.error(e);
+                    }
+                });
             }
         }
     }

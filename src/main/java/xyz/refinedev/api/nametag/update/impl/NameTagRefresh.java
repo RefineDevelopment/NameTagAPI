@@ -44,4 +44,8 @@ public class NameTagRefresh implements NameTagUpdate {
     public void update(NameTagHandler nameTagHandler) {
         nameTagHandler.applyUpdate(this);
     }
+
+    public int getPriority() {
+        return 5;
+    }
 }

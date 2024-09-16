@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
+import xyz.refinedev.api.nametag.update.impl.NameTagInitiate;
 import xyz.refinedev.api.nametag.util.VersionUtil;
 
 import java.util.concurrent.CompletableFuture;
@@ -28,34 +29,20 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public final class NameTagListener implements Listener {
 
-    private static boolean firstJoin;
 
     private final NameTagHandler handler;
-
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        Runnable wrapper = () -> {
-            if (!NameTagListener.firstJoin) {
-                this.handler.createTeams(player);
-                NameTagListener.firstJoin = true;
-            } else {
-                this.handler.initiatePlayer(player);
-            }
-            this.handler.reloadPlayer(player);
-            this.handler.reloadOthersFor(player);
-        };
-
-        if (VersionUtil.MINOR_VERSION < 16) {
-            CompletableFuture.runAsync(wrapper);
-        } else {
-            // PacketEvents or maybe even bukkit is making first join
-            // miss the packets, they're getting sent before the player has logged in.
-            // So to counter this, we simply send the packets 2 ticks later (which should be enough).
-            Bukkit.getScheduler().runTaskLaterAsynchronously(this.handler.getPlugin(), wrapper, 20L);
-        }
+        // PacketEvents or maybe even bukkit is making first join
+        // miss the packets, they're getting sent before the player has logged in.
+        // So to counter this, we simply send the packets 2 ticks later (which should be enough).
+        Bukkit.getScheduler().runTaskLater(this.handler.getPlugin(), () -> {
+            NameTagInitiate initiate = new NameTagInitiate(player);
+            this.handler.getThread().addUpdate(initiate);
+        }, 20L);
     }
 
     @EventHandler
