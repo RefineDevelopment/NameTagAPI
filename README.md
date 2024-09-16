@@ -1,41 +1,44 @@
 # NameTagAPI
-Refine's NameTag API | Fork of Hylist's/Frozenorb's API
+Refine's NameTag API
 
 ## Features
-- Support for Per-viewer NameTag changing
-- Asynchronous and Optimized
-- Support for Hex-Color (1.16+)
-- Supports all Major Versions (1.8, 1.12, 1.16, 1.17+)
+- Support for per-player NameTags.
+- Lightweight with no performance overhead.
+- Supports hex colors on supported versions.
+- Completely asynchronous and off-thread.
+- Supports all versions from 1.8+
 - Easy to use
 
 ## Installing
-You need to shade this repository into your plugin.
+You can either shade this repository into your plugin, or run it as a plugin by itself.
 
 1. Clone this repository
 2. Enter the directory: `cd NameTagAPI`
 3. Build & install with Maven: `mvn clean package install`
 
 OR
-
-Use this maven command to directly install this API's compiled JAR file from target into your .m2 repo
-
+```xml
+<repositories>
+    <repository>
+        <id>refine-public</id>
+        <url>https://maven.refinedev.xyz/public-repo/</url>
+    </repository>
+</repositories>
 ```
-mvn install:install-file -Dfile=<compiled-jar> -DgroupId=xyz.refinedev.api -DartifactId=NameTagAPI -Dversion=2.0 -Dpackaging=jar
-```
-
-Next, add NameTagAPI to your project's dependencies via Maven
+Next, add TablistAPI to your project's dependencies via Maven
 
 Add this to your `pom.xml` `<dependencies>`:
 ```xml
 <dependency>
   <groupId>xyz.refinedev.api</groupId>
   <artifactId>NameTagAPI</artifactId>
-  <version>2.1</version> 
+  <version>2.4</version>
   <scope>compile</scope>
 </dependency>
 ```
 
 ## Usage
+It requires PacketEvents as a dependency, refer to their [wiki guide](https://github.com/retrooper/packetevents/wiki/)
 
 You can initiate and register a NameTagAdapter using the following code
 ```java
@@ -45,12 +48,13 @@ import xyz.refinedev.api.nametag.adapter.DefaultNameTagAdapter;
 public class ExamplePlugin extends JavaPlugin {
 
     private NameTagHandler nameTagHandler;
+    private PacketEventsAPI<?> packetEvents; // Initialize this yourself
 
     @Override
     public void onEnable() {
         this.nameTagHandler = new NameTagHandler(this);
-        this.nameTagHandler.init();
-        this.nameTagHandler.registerAdapter(new DefaultNameTagAdapter(), 2L);
+        this.nameTagHandler.init(this.packetevents);
+        this.nameTagHandler.registerAdapter(new DefaultNameTagAdapter(), 20L); // Every 1 second
     }
 }
 ```
