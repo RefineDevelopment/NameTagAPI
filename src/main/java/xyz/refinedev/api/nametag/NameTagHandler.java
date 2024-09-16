@@ -135,19 +135,6 @@ public class NameTagHandler {
     }
 
     /**
-     * This method is only used once on join to create all
-     * the teams for our cache AND the player. It's only used once for
-     * the first player joining the server.
-     *
-     * @param player {@link Player} Target
-     */
-    public void createTeams(Player player) {
-        if (this.thread == null) return;
-
-        this.adapter.fetchNameTag(player, player);
-    }
-
-    /**
      * Send all {@link NameTagTeam} teams to this player
      *
      * @param player {@link Player} Target
@@ -240,6 +227,8 @@ public class NameTagHandler {
     public void applyUpdate(NameTagRefresh nameTagRefresh) {
         if (nameTagRefresh.isGlobal()) {
             Player refreshFor = Bukkit.getPlayer(nameTagRefresh.getRefreshFor());
+            if (refreshFor == null) return;
+
             for (Player player : Bukkit.getOnlinePlayers()) {
                 this.reloadPlayerInternal(player, refreshFor);
             }
