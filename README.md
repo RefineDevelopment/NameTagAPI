@@ -1,5 +1,5 @@
 # NameTagAPI
-Refine's NameTag API | Fork of Hylist's/Frozenorb's API
+Refine's NameTag API
 
 ## Features
 - Support for per-player NameTags.
