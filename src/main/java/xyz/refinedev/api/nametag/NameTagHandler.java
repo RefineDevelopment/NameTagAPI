@@ -32,7 +32,6 @@ import xyz.refinedev.api.nametag.listener.DisguiseListener;
 import xyz.refinedev.api.nametag.listener.GlitchFixListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
-import xyz.refinedev.api.nametag.update.impl.NameTagRefresh;
 import xyz.refinedev.api.nametag.util.chat.ColorUtil;
 import xyz.refinedev.api.nametag.util.packet.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
@@ -186,7 +185,7 @@ public class NameTagHandler {
     }
 
     /**
-     * Apply the {@link NameTagRefresh} according to
+     * Apply a nametag update according to
      * the specified conditions to the viewer/target
      *
      * @param viewer {@link UUID} Viewer
