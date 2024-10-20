@@ -12,10 +12,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
-import xyz.refinedev.api.nametag.update.impl.NameTagInitiate;
-import xyz.refinedev.api.nametag.util.VersionUtil;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * This Project is property of Refine Development.

@@ -1,5 +1,6 @@
 package xyz.refinedev.api.nametag.adapter;
 
+import net.megavex.scoreboardlibrary.api.team.ScoreboardTeam;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
 import xyz.refinedev.api.nametag.NameTagHandler;
 import lombok.AllArgsConstructor;
@@ -27,16 +28,16 @@ public abstract class NameTagAdapter {
      * @param refreshFor {@link Player Viewer} the player that will be receiving the update
      * @return           {@link NameTagTeam} The NameTag Entry used for updates
      */
-    public abstract NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor);
+    public abstract ScoreboardTeam fetchNameTag(Player toRefresh, Player refreshFor);
 
     /**
      * Create a NameTagInfo from raw prefix and suffix
      *
      * @param prefix {@link String prefix}
      * @param suffix {@link String suffix}
-     * @return       {@link NameTagTeam Name Tag info}
+     * @return       {@link ScoreboardTeam team}
      */
-    public NameTagTeam createNameTag(String prefix, String suffix) {
+    public ScoreboardTeam createNameTag(String prefix, String suffix) {
         return NameTagHandler.getInstance().getOrCreate(prefix, suffix);
     }
 }

@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 
+import net.megavex.scoreboardlibrary.api.team.ScoreboardTeam;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,10 +42,10 @@ public class NameTagPlugin extends JavaPlugin {
         if (!this.packetEventsAPI.isInitialized()) this.packetEventsAPI.init();
 
         this.nameTagHandler = new NameTagHandler(this);
-        this.nameTagHandler.init(this.packetEventsAPI);
+        this.nameTagHandler.init(this.packetEventsAPI, true);
         this.nameTagHandler.registerAdapter(new NameTagAdapter() {
             @Override
-            public NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor) {
+            public ScoreboardTeam fetchNameTag(Player toRefresh, Player refreshFor) {
                 return createNameTag(getConfig().getString("NAME-TAGS.PREFIX"), getConfig().getString("NAME-TAGS.SUFFIX"));
             }
         }, 2L);

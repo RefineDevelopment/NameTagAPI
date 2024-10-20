@@ -1,5 +1,6 @@
 package xyz.refinedev.api.nametag.adapter;
 
+import net.megavex.scoreboardlibrary.api.team.ScoreboardTeam;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
 
 import org.bukkit.entity.Player;
@@ -20,9 +21,9 @@ public class DefaultNameTagAdapter extends NameTagAdapter {
      *
      * @param toRefresh  {@link Player Target} the player getting their nameTag Refreshed
      * @param refreshFor {@link Player Viewer} the player that will be receiving the update
-     * @return           {@link NameTagTeam} The NameTag Entry used for updates
+     * @return           {@link ScoreboardTeam} The NameTag Entry used for updates
      */
-    public NameTagTeam fetchNameTag(Player toRefresh, Player refreshFor) {
+    public ScoreboardTeam fetchNameTag(Player toRefresh, Player refreshFor) {
         return (createNameTag("&c", "&9 [Refine]"));
     }
 
