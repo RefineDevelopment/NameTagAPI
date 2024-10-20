@@ -48,7 +48,7 @@ public class NameTagPlugin extends JavaPlugin {
             public ScoreboardTeam fetchNameTag(Player toRefresh, Player refreshFor) {
                 return createNameTag(getConfig().getString("NAME-TAGS.PREFIX"), getConfig().getString("NAME-TAGS.SUFFIX"));
             }
-        }, 2L);
+        });
         this.nameTagHandler.setDebugMode(true);
     }
 
