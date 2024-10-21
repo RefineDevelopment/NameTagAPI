@@ -87,7 +87,7 @@ public class NameTagHandler {
      */
     private NameTagAdapter adapter;
     private PacketEventsAPI<?> packetEvents;
-    private boolean collisionEnabled, debugMode;
+    private boolean collisionEnabled, debugMode, initialized;
 
     public NameTagHandler(JavaPlugin plugin) {
         instance = this;
@@ -114,12 +114,16 @@ public class NameTagHandler {
         } catch (Exception e) {
             //
         }
+
+        this.initialized = true;
     }
 
     /**
      * Shutdown Logic of this NameTag Handler
      */
     public void unload() {
+        if (!this.initialized) return;
+
         this.teamMap.clear();
         this.teamManager.close();
     }
@@ -134,6 +138,8 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void initiatePlayer(Player player) {
+        if (!this.initialized) return;
+
         if (this.teamCache.isEmpty()) {
             this.teamManager.addPlayer(player); // Player will be added to the default TeamDisplay of each ScoreboardTeam
             this.adapter.fetchNameTag(player, player);
@@ -149,6 +155,8 @@ public class NameTagHandler {
      * @param player {@link Player} Target
      */
     public void unloadPlayer(Player player) {
+        if (!this.initialized) return;
+
         this.teamManager.removePlayer(player);
         this.teamMap.remove(player.getUniqueId());
     }
@@ -160,6 +168,8 @@ public class NameTagHandler {
      * @param refreshFor {@link Player} viewer
      */
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
+        if (!this.initialized) return;
+
         this.reloadPlayerInternal(toRefresh, refreshFor);
     }
 
@@ -169,6 +179,8 @@ public class NameTagHandler {
      * @param toRefresh {@link Player} target
      */
     public void reloadPlayer(Player toRefresh) {
+        if (!this.initialized) return;
+
         this.applyUpdate(null, toRefresh.getUniqueId(), false);
     }
 
@@ -178,6 +190,8 @@ public class NameTagHandler {
      * @param refreshFor {@link Player} viewer
      */
     public void reloadOthersFor(Player refreshFor) {
+        if (!this.initialized) return;
+
         for (Player toRefresh : Bukkit.getOnlinePlayers()) {
             if (refreshFor == toRefresh) continue;
             this.reloadPlayerInternal(toRefresh, refreshFor);
@@ -193,6 +207,8 @@ public class NameTagHandler {
      * @param global {@link Boolean} Viewers are all players?
      */
     public void applyUpdate(UUID viewer, UUID target, boolean global) {
+        if (!this.initialized) return;
+
         if (global) {
             Player refreshFor = Bukkit.getPlayer(viewer);
             if (refreshFor == null) return;
@@ -222,6 +238,8 @@ public class NameTagHandler {
     }
 
     public void reloadPlayerInternal(Player toRefresh, Player refreshFor) {
+        if (!this.initialized) return;
+
         ScoreboardTeam provided = this.adapter.fetchNameTag(toRefresh, refreshFor);
         if (provided == null) return;
 
