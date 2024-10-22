@@ -32,6 +32,8 @@ import xyz.refinedev.api.nametag.listener.DisguiseListener;
 import xyz.refinedev.api.nametag.listener.GlitchFixListener;
 import xyz.refinedev.api.nametag.listener.NameTagListener;
 import xyz.refinedev.api.nametag.setup.NameTagTeam;
+import xyz.refinedev.api.nametag.thread.NameTagThread;
+import xyz.refinedev.api.nametag.thread.NameTagUpdate;
 import xyz.refinedev.api.nametag.util.chat.ColorUtil;
 import xyz.refinedev.api.nametag.util.packet.PacketUtil;
 import xyz.refinedev.api.nametag.util.VersionUtil;
@@ -86,6 +88,7 @@ public class NameTagHandler {
      * NameTag Adapter of this instance
      */
     private NameTagAdapter adapter;
+    private NameTagThread nameTagThread;
     private PacketEventsAPI<?> packetEvents;
     private boolean collisionEnabled, debugMode, initialized;
 
@@ -102,6 +105,8 @@ public class NameTagHandler {
         this.scoreboardLibrary = scoreboardLibrary;
         this.teamManager = scoreboardLibrary.createTeamManager();
         this.packetEvents = packetEvents;
+        this.nameTagThread = new NameTagThread(this, 20L);
+
         packetEvents.getEventManager().registerListener(new DisguiseListener(this));
 
         if (registerListeners) {
@@ -123,6 +128,8 @@ public class NameTagHandler {
      */
     public void unload() {
         if (!this.initialized) return;
+
+        this.nameTagThread.stopExecuting();
 
         this.teamMap.clear();
         this.teamManager.close();
@@ -170,7 +177,12 @@ public class NameTagHandler {
     public void reloadPlayer(Player toRefresh, Player refreshFor) {
         if (!this.initialized) return;
 
-        this.reloadPlayerInternal(toRefresh, refreshFor);
+        if (!Bukkit.isPrimaryThread()) {
+            this.applyUpdate(toRefresh, refreshFor, false);
+            return;
+        }
+
+        this.nameTagThread.addUpdate(new NameTagUpdate(toRefresh.getUniqueId(), refreshFor.getUniqueId(), false));
     }
 
     /**
@@ -181,7 +193,12 @@ public class NameTagHandler {
     public void reloadPlayer(Player toRefresh) {
         if (!this.initialized) return;
 
-        this.applyUpdate(null, toRefresh.getUniqueId(), false);
+        if (!Bukkit.isPrimaryThread()) {
+            this.applyUpdate(null, toRefresh, false);
+            return;
+        }
+
+        this.nameTagThread.addUpdate(new NameTagUpdate(null, toRefresh.getUniqueId(), false));
     }
 
     /**
@@ -192,10 +209,12 @@ public class NameTagHandler {
     public void reloadOthersFor(Player refreshFor) {
         if (!this.initialized) return;
 
-        for (Player toRefresh : Bukkit.getOnlinePlayers()) {
-            if (refreshFor == toRefresh) continue;
-            this.reloadPlayerInternal(toRefresh, refreshFor);
+        if (!Bukkit.isPrimaryThread()) {
+            this.applyUpdate(refreshFor, null, true);
+            return;
         }
+
+        this.nameTagThread.addUpdate(new NameTagUpdate(refreshFor.getUniqueId(), null, true));
     }
 
     /**
@@ -207,33 +226,41 @@ public class NameTagHandler {
      * @param global {@link Boolean} Viewers are all players?
      */
     public void applyUpdate(UUID viewer, UUID target, boolean global) {
+        Player viewerPlayer = Bukkit.getPlayer(viewer);
+        Player targetPlayer = Bukkit.getPlayer(target);
+        this.applyUpdate(viewerPlayer, targetPlayer, global);
+    }
+
+    /**
+     * Apply a nametag update according to
+     * the specified conditions to the viewer/target
+     *
+     * @param viewer {@link UUID} Viewer
+     * @param target {@link UUID} Target
+     * @param global {@link Boolean} Viewers are all players?
+     */
+    public void applyUpdate(Player viewer, Player target, boolean global) {
         if (!this.initialized) return;
 
         if (global) {
-            Player refreshFor = Bukkit.getPlayer(viewer);
-            if (refreshFor == null) return;
+            if (viewer == null) return;
 
             for (Player player : Bukkit.getOnlinePlayers()) {
-                this.reloadPlayerInternal(player, refreshFor);
+                this.reloadPlayerInternal(player, viewer);
             }
             return;
         }
 
-        Player toRefreshPlayer = Bukkit.getPlayer(target);
-        if (toRefreshPlayer == null) {
+        if (target == null) {
             return;
         }
 
         if (viewer == null) {
             for ( Player player : Bukkit.getOnlinePlayers() ) {
-                this.reloadPlayerInternal(toRefreshPlayer, player);
+                this.reloadPlayerInternal(target, player);
             }
         } else {
-            Player refreshForPlayer = Bukkit.getPlayer(viewer);
-
-            if (refreshForPlayer != null) {
-                this.reloadPlayerInternal(toRefreshPlayer, refreshForPlayer);
-            }
+            this.reloadPlayerInternal(target, viewer);
         }
     }
 
