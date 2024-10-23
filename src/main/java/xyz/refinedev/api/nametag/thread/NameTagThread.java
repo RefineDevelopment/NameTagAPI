@@ -7,7 +7,6 @@ import lombok.extern.log4j.Log4j2;
 
 import xyz.refinedev.api.nametag.NameTagHandler;
 
-import java.util.Comparator;
 import java.util.Queue;
 import java.util.concurrent.*;
 
@@ -38,7 +37,7 @@ public class NameTagThread {
         this.handler = nameTagHandler;
         this.ticks = ticks;
 
-        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("Bolt - NameTag")
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat(handler.getPlugin().getName() + " - NameTag")
                 .setPriority(Thread.NORM_PRIORITY - 1)
                 .setDaemon(true)
                 .setUncaughtExceptionHandler((a, e) -> {

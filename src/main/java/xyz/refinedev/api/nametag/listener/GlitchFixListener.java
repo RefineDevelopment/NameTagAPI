@@ -27,7 +27,6 @@ public class GlitchFixListener implements Listener {
     public void onGlitch(GlitchFixEvent event) {
         Player player = event.getPlayer();
         nameTagHandler.reloadPlayer(player);
-        nameTagHandler.reloadOthersFor(player);
     }
 
 }

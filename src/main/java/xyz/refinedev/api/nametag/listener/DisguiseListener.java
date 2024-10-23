@@ -31,7 +31,7 @@ public class DisguiseListener extends SimplePacketListenerAbstract {
     public void onPacketPlaySend(PacketPlaySendEvent event) {
         PacketType.Play.Server type = event.getPacketType();
         if (type == RESPAWN) {
-            Player player = (Player) event.getPlayer();
+            Player player = event.getPlayer();
             nameTagHandler.reloadPlayer(player);
         }
     }
